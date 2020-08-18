@@ -1,23 +1,72 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-
+import Home from '../views/Main/home/home.vue'
+import UpdateProduct from '../views/Main/product/Updateproduct.vue'
+import Admin from '../views/Main/admin/Admin.vue'
+import LandingPage from '../views/Main/landingpage/LandingPage.vue'
+import History from '../views/Main/history/history.vue'
+// import Main from '../views/Main/index.vue'
+import Product from '../views/Main/product/product.vue'
+import Card from '../components/_base/card.vue'
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+const routes = [{
+  // path: '/',
+  // name: 'Home',
+  // component: Home
+  path: '/landingpage',
+  name: 'LandingPage',
+  component: LandingPage
+},
+{
+  path: '/update',
+  name: 'update',
+  component: UpdateProduct
+},
+{
+  path: '/',
+  name: 'home',
+  component: Home
+},
+{
+  path: '/admin',
+  name: 'admin',
+  component: Admin
+},
+{
+  path: '/product',
+  name: 'Product',
+  component: Product
+},
+{
+  path: '/card',
+  name: 'Card',
+  component: Card
+},
+{
+  path: '/history',
+  name: 'History',
+  component: History
+}
+// {
+//   path: '/home',
+//   name: 'Home',
+//   component: Home
+//   route level code-splitting
+//   this generates a separate chunk (about.[hash].js) for this route
+//   which is lazy-loaded when the route is visited.
+//   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+// },
+// {
+//   path: '/history',
+//   name: 'History',
+//   component: History
+// },
+// {
+//   path: '/product',
+//   name: 'Product',
+//   component: Product
+// }
 ]
 
 const router = new VueRouter({
