@@ -6,10 +6,7 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Features](#features)
 - [Requirements](#requirements)
-- [Usage](#usage-for-development)
-- [Create Environment Variable](#create-environment-variable)
 - [Screenshots](#screenshots)
 - [Related Project](#related-project-backend)
 
