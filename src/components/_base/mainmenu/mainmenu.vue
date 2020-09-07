@@ -1,17 +1,30 @@
 <template>
 <div class="main">
+    <!-- <div class="sort">
+      <select @change="sorting" name="sort" id="sort" v-model="sorti" >
+        <option v-for="(sort, index) in sorts" :key="index" v-bind:value="sort">{{sort}}</option>
+      </select>
+    </div> -->
     <main>
-      <div class="card-main" v-for="(item, index) in products" :key="item.id" v-on:click="currentItem(item.image,item.nameProduct,item.price, index)">
-        <img src="../../../assets/img/foods/food1.jpg" alt="">
-        <p>{{item.nameProduct}}</p>
-        <p>{{`Rp. ${item.price}`}}</p>
-        <!-- <p>{{item.id}}</p> -->
-        <!-- {{kmn}} -->
-        <!-- <button>Tambah Data</button>
-        <button><router-link to="/update">Update Data</router-link></button> -->
-        <!-- <button v-on:click="tmbData">Tambah Data</button>
-        <button v-on:click="tmbData"><router-link to="/update">Update Data</router-link></button> -->
+      <div class="sort">
+      <select @change="sorting" name="sort" id="sort" v-model="sorti" >
+        <option v-for="(sort, index) in sorts" :key="index" v-bind:value="sort">{{sort}}</option>
+      </select>
       </div>
+      <div class="card-main" v-for="(item, index) in getProductsAll" :key="item.id" v-on:click="currentItem(item.image,item.nameProduct,item.price, index, item.id)">
+        <img v-bind:src="item.image" alt="">
+        <p>{{item.nameProduct }}</p>
+        <p>{{`Rp. ${item.price}`}}</p>
+      </div>
+      <ButtonPagination/>
+      <Modal/>
+      <!-- <div class="container-nav">
+        <div class="prev"> Prev </div>
+        <div v-for="(page, index) in getlastpage" :key="index">
+          <span @click="nextPage(page)">{{page}}</span>
+        </div>
+        <div class="next">Next</div>
+      </div> -->
     </main>
     <div class="your-cart">
         <div class="container-your-cart" v-if="currentproduct.length === 0">
@@ -20,13 +33,13 @@
             <span>Please add some items from the menu</span>
         </div>
         <div v-else>
-        <div class="item-cart" v-for="(nproduct, index) in currentproduct" :key="index">
-          <img class="img" src="../../../assets/img/foods/food2.jpg" alt="" srcset="">
-          <span class="item-name">{{ nproduct.nProduct }}</span>
+        <div class="item-cart" v-for="(nproduct, index) in currentproduct" :key="nproduct.index">
+          <img class="img" :src="nproduct.image" alt="" srcset="">
+          <span class="item-name">{{ nproduct.nProduct }}  {{nproduct.index}} <span @click="delItem(index, nproduct.index)">X</span></span>
           <div class="button">
-              <button v-on:click="buttonMin(index, nproduct.pp)">-</button><input type="text" v-model="qtys[index]"><button v-on:click="buttonAdd(index, nproduct.pp)">+</button>
+              <button v-on:click="buttonMin(nproduct.index, nproduct.pp)">-</button><input type="text" v-model="qtys[nproduct.index]"><button v-on:click="buttonAdd(nproduct.index, nproduct.pp)">+</button>
           </div>
-          <span class="item-price">Rp. {{ qtys[index] * nproduct.pp }}</span>
+          <span class="item-price">Rp. {{ qtys[nproduct.index] * nproduct.pp }}</span>
         </div>
         <div class="bottom">
           <div class="total">
@@ -52,7 +65,7 @@
             <span>{{nproduct.nProduct}}</span>
           </div>
           <div class="price">
-            <span>{{ qtys[index] * nproduct.pp }}</span>
+            <span>{{ qtys[nproduct.index] * nproduct.pp }}</span>
           </div>
         </div>
         <div class="total">
@@ -70,91 +83,166 @@
 </template>
 
 <script>
+import Modal from '../modal/modal'
+import ButtonPagination from '../button/buttonPagination'
 import axios from 'axios'
-// import Vue from 'vue'
+import navbar from '../navbar/navbar'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'Mainmenu',
-  props: [
-    'kmn'
-  ],
-  // props: {
-  //   post: Array
-  // },
+  components: {
+    ButtonPagination,
+    Modal
+  },
+  // props: [
+  //   'kmn'
+  // ],
+  mixins: [navbar],
   data () {
     return {
       products: [],
       currentproduct: [],
       qty: 1,
-      // qtys: [this.qty, this.qty, this.qty],
       indexCard: 1,
       qtys: [],
-      // qtys[this.indexCard]: 0
       total: [],
       ttop: 0,
       isActive: false,
-      teangKata: ''
-    //   qty: 1
-      // naImg: '',
-      // naNameP: '',
-      // naPrice: 0
+      // teangKata: '',
+      totalCart: [],
+      sorti: '',
+      sorts: ['A - Z', 'Z - A', 'Price A-Z', 'Price Z-A']
     }
   },
+  computed: {
+    // filterProduct: function (value) {
+    //   console.log(value)
+    //   console.log(this.teangKata)
+    //   const carib = this.products.filter(res => res.nameProduct.match(this.getSearch))
+    //   console.log(carib)
+    //   return carib
+    // },
+    ...mapGetters(['gettotalCart, getSearch', 'getProductsAll', 'getPage', 'getLimit', 'getTotalProducts', 'getlastpage'])
+  },
   methods: {
+    sorting () {
+      // let sort = ''
+      if (this.sorti === 'A - Z') {
+        axios.get('http://localhost:4000/api/v1/products/?sort=nameProduct&order=asc')
+          .then(res => {
+            this.setProduct(res.data.result)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      } else if (this.sorti === 'Z - A') {
+        axios.get('http://localhost:4000/api/v1/products/?sort=nameProduct&order=desc')
+          .then(res => {
+            this.setProduct(res.data.result)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      } else if (this.sorti === 'Price A-Z') {
+        axios.get('http://localhost:4000/api/v1/products/?sort=price&order=asc')
+          .then(res => {
+            this.setProduct(res.data.result)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      } else if (this.sorti === 'Price Z-A') {
+        axios.get('http://localhost:4000/api/v1/products/?sort=price&order=desc')
+          .then(res => {
+            this.setProduct(res.data.result)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+    },
+    ...mapMutations(['settotalCart', 'setProduct']),
+    ...mapActions(['actAllProducts', 'actNextPage']),
+    nextPage (page) {
+      alert('Page berikutnya ' + page)
+      this.actNextPage(page)
+    },
     getData () {
-    //   axios.get('https://jsonplaceholder.typicode.com/photos')
-      axios.get('http://localhost:4000/api/v1/products')
+      axios.get(process.env.VUE_APP_PRODUCT)
         .then((res) => {
           this.products = res.data.result
         })
         .catch(err => alert(err))
     },
-    // tmbData: function () {
-    //   axios.post('http://localhost:4000/api/v1/products', this.kmn)
-    //     .then((res) => {
-    //       this.getData()
-    //       alert('Sukses menyimpan Data')
-    //     })
-    //     .catch(err => alert(err))
-    // },
-    currentItem: function (img, name, price, index) {
-      console.log('index card ' + index)
-      for (let i = 0; i <= index; i++) {
-        if (this.qtys[i] === undefined) {
-          this.qtys.push(1)
-        }
+    delItem (index, id) {
+      alert('hapus item ' + index + ' ' + id)
+      this.currentproduct.splice(index, 1)
+      alert(this.qtys[id])
+      for (let i = 1; i <= this.qtys[id]; i++) {
+        this.totalCart.pop()
+        this.$store.commit('settotalCart', this.totalCart.length)
       }
-      //   this.qtys[id] = this.qtys[id] - 1
-      //   const nana = this.qtys[id] * price
-      //   this.total[id] = nana
-      if (this.total.length !== 0) {
-        console.log('sebelum push')
+      alert(id + ' id')
+      this.total.splice(id, 1)
+      this.qtys.splice(id, 1, undefined)
+      console.log(this.total)
+      console.log('yaya')
+      console.log(this.total.length)
+      const ttop = this.total.reduce((ind1, ind2) => {
+        console.log(ind1 + ' ' + ind2 + ' ind1 ind2')
+        if (ind1 !== 'empty' && ind2 !== 'empty') return ind1 + ind2
+        return 0
+      })
+      this.ttop = ttop
+    },
+    currentItem: function (img, name, price, index, id) {
+      const hsl = this.totalCart.find(e => e === id)
+      console.log(hsl, ' hasl id')
+      if (hsl) {
+        this.qtys[index] = this.qtys[index] + 1
+        console.log(`qtys[${id}]` + this.qtys[index])
+        console.log('sebelum total ')
         console.log(this.total)
-        this.total.push(price)
-        console.log('sesudah push')
+        const nana = this.qtys[index] * price
+        this.total[index] = nana
+        console.log('sesudah total ')
         console.log(this.total)
         const ttop = this.total.reduce((ind1, ind2) => ind1 + ind2)
         this.ttop = ttop
-        console.log('jumlah ada')
-        console.log(this.ttop)
+        this.totalCart.push(id)
+        this.$store.commit('settotalCart', this.totalCart.length)
       } else {
-        console.log(' else sebelum total')
-        console.log(this.total)
-        this.ttop += price
-        this.total.push(this.ttop)
-        console.log('else sesudah total push')
-        console.log(this.total)
-        console.log('jumlah else')
-        console.log(this.ttop)
+        this.qtys[index] = 1
+        this.totalCart.push(id)
+        this.$store.commit('settotalCart', this.totalCart.length)
+        if (this.total.length !== 0) {
+          console.log('sebelum push')
+          console.log(this.total)
+          this.total[index] = price
+          console.log('sesudah push')
+          console.log(this.total)
+          const ttop = this.total.reduce((ind1, ind2) => ind1 + ind2)
+          this.ttop = ttop
+          console.log('jumlah ada')
+          console.log(this.ttop)
+        } else {
+          console.log(' else sebelum total')
+          console.log(this.total)
+          this.ttop += price
+          this.total[index] = this.ttop
+          console.log('else sesudah total push')
+          console.log(this.total)
+          console.log('jumlah else')
+          console.log(this.ttop)
+        }
+        console.log(this.qtys[index])
+        const dt = { image: img, nProduct: name, pp: price, id: id, index: index }
+        this.currentproduct.push(dt)
+        console.log(this.currentproduct)
+        console.log('length')
+        console.log(this.currentproduct.length)
       }
-      //   const ttop = this.total.reduce((ind1, ind2) => ind1 + ind2)
-      //   this.ttop = price
-      //   this.indexCard = index
-      console.log(this.qtys[index])
-      const dt = { image: img, nProduct: name, pp: price }
-      this.currentproduct.push(dt)
-      console.log(this.currentproduct)
-      console.log('length')
-      console.log(this.currentproduct.length)
+      console.log('index card ' + index)
     },
     buttonAdd: function (id, price) {
       this.qtys[id] = this.qtys[id] + 1
@@ -167,9 +255,8 @@ export default {
       console.log(this.total)
       const ttop = this.total.reduce((ind1, ind2) => ind1 + ind2)
       this.ttop = ttop
-      //   console.log('ttop ' + ttop)
-      console.log('this.ttop ')
-      console.log(this.ttop)
+      this.totalCart.push(id)
+      this.$store.commit('settotalCart', this.totalCart.length)
     },
     buttonMin: function (id, price) {
       if (this.qtys[id] > 1) {
@@ -178,6 +265,8 @@ export default {
         this.total[id] = nana
         const ttop = this.total.reduce((ind1, ind2) => ind1 + ind2)
         this.ttop = ttop
+        this.totalCart.pop()
+        this.$store.commit('settotalCart', this.totalCart.length)
       }
     },
     checkout: function () {
@@ -188,6 +277,17 @@ export default {
         this.currentproduct.pop()
         i = 0
       }
+      for (let i = 0; i <= this.totalCart.length; i++) {
+        this.totalCart.pop()
+        i = 0
+      }
+      for (let i = 0; i <= this.qtys.length; i++) {
+        this.qtys.pop()
+        this.total.pop()
+        i = 0
+      }
+      this.ttop = 0
+      this.$store.commit('settotalCart', this.totalCart.length)
       console.log(this.currentproduct)
       console.log('length')
       console.log(this.currentproduct.length)
@@ -198,7 +298,7 @@ export default {
         cashier: 'hamdan',
         amount: this.ttop
       }
-      axios.post('http://localhost:4000/api/v1/histories/', kirimData)
+      axios.post(process.env.VUE_APP_HISTORY, kirimData)
         .then((res) => {
           alert('saving sukses')
           this.isActive = false
@@ -206,135 +306,25 @@ export default {
         .catch(err => console.log(err))
       this.cancel()
     }
-    // currentItem: function (img, name, price, index) {
-
-    //   console.log('index card ' + index)
-
-    //   for (let i = 0; i <= index; i++) {
-    //     if (this.qtys[i] === undefined) {
-    //       this.qtys.push(1)
-    //     }
-    //   }
-    //   this.indexCard = index
-    //   console.log(this.qtys[index], this.indexCard)
-    //   const dt = { image: img, nProduct: name, pp: price }
-    //   this.currentproduct.push(dt)
-    //   // console.log(img, name, price)
-    //   // console.log(this.currentproduct.image, this.currentproduct.nProduct, this.currentproduct.pp)
-    // },
-    // buttonAdd: function (id, qtye, price) {
-    // //   if (id === 1) {
-    // //     this.qty = 1
-    // //   }
-    // //   this.qtys[id] = this.qty++
-    //   // this.qty++ berhasil
-    //   console.log(`index Button ${this.indexCard} `)
-    //   this.qtys[id] = this.qtys[id] + 1
-    //   this.indexCard = id
-    //   // this.qty = this.qtys[id]
-    //   console.log(`qtys[${id}]` + this.qtys[id])
-    //   // console.log('price ' + price)
-    //   // console.log('qtye ' + qtye)
-    //   // console.log('id ' + id)
-    //   const nana = this.qtys[id] * price
-    //   // console.log(this.total)
-    //   console.log('qty ' + this.qty)
-    //   // console.log(nana)
-    //   // this.total.push(nana)
-    //   this.total[id] = nana
-    //   // console.log(this.total)
-    //   const ttop = this.total.reduce((ind1, ind2) => ind1 + ind2)
-    //   // console.log(ttop)
-    //   this.ttop = ttop
-    //   // this.total.push(nana)
-    //   // console.log(this.total)
-    //   // return this.total
-
-    // //   console.log(`qtys[${id}] ` + this.qtys[id])
-    // //   console.log('qty ' + this.qty)
-    // //   console.log('id ' + id)
-    // },
-    // buttonMin: function (id, qtye, price) {
-    //   if (this.qtys[id] > 1) {
-    //     // this.qty--
-    //     this.qtys[id] = this.qtys[id] - 1
-    //     const nana = this.qtys[id] * price
-    //     this.total[id] = nana
-    //     const ttop = this.total.reduce((ind1, ind2) => ind1 + ind2)
-    //     this.ttop = ttop
-    //   }
-    // },
-    // checkout: function () {
-    //   this.isActive = true
-    //   // const kirimData = {
-    //   //   invoice: 30022,
-    //   //   cashier: 'hamdan',
-    //   //   amount: this.ttop
-    //   // }
-    //   // axios.post('http://localhost:4000/api/v1/histories/', kirimData)
-    //   //   .then((res) => {
-    //   //     // this.getData()
-    //   //     // this.products = res.data.result
-    //   //     alert('saving sukses')
-    //   //   })
-    //   //   .catch(err => console.log(err))
-    // },
-    // cancel: function () {
-    //   for (let i = 0; i <= this.currentproduct.length; i++) {
-    //     this.currentproduct.pop()
-    //   }
-    // },
-    // print: function () {
-    //   const kirimData = {
-    //     invoice: 30022,
-    //     cashier: 'hamdan',
-    //     amount: this.ttop
-    //   }
-    //   axios.post('http://localhost:4000/api/v1/histories/', kirimData)
-    //     .then((res) => {
-    //       // this.getData()
-    //       // this.products = res.data.result
-    //       alert('saving sukses')
-    //       this.isActive = false
-    //     })
-    //     .catch(err => console.log(err))
-    // }
-    // // totalS: function (qty, nproduct) {
-    // //   this.total = qty * nproduct
-    // // }
   },
   mounted () {
     this.getData()
-    // this.hg()
-    // this.totalS()
+    this.actAllProducts()
   },
   created () {
-    this.$root.$on('SenndingData', async (kirimData) => {
-      await kirimData()
-      await console.log('daga')
-
-      return await this.getData()
-    })
-    this.$root.$on('newSearch', teang => {
-      alert(teang)
-    })
+    // this.$root.$on('newSearch', teang => {
+    //   this.teangKata = teang
+    //   console.log(this.teangKata)
+    // })
   }
-  // mounted () {
-  //   this.hg()
-  // }
-
 }
-// var yourcart = new Vue({
-//   el: '#yourcart',
-//   data: {
-//     massage: 'inid'
-//   }
-// })
-
-// module.exports = yourcart
 </script>
 
 <style scoped>
+.sort {
+      width: 100%;
+    margin-bottom: 16px;
+}
 .main {
       grid-area: main;
       /* border: 1px solid red; */
@@ -342,7 +332,7 @@ export default {
       display: grid;
     grid-template-areas:
         "main your-cart";
-    grid-template-columns: 1.34fr 1fr ;
+    grid-template-columns: 1.82fr 1fr;
 }
 
 main {
@@ -354,6 +344,7 @@ main {
     justify-content: space-between;
     /* width: 57.2%; */
     box-sizing: border-box;
+    overflow: auto;
 }
 
 main .card-main {
@@ -618,5 +609,18 @@ main .card-main {
     background: #F24F8A;
     margin-top: 10px;
 }
+
+/* .container-nav {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.container-nav div{
+  width: 25px;
+    padding: 8px;
+    text-align: center;
+        background-color: #57CAD5;
+            display: inline-block;
+} */
 
 </style>

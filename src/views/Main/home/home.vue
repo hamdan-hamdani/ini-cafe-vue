@@ -48,7 +48,7 @@ export default {
     grid-template-areas:
         "header header cart"
         "left-bar main main";
-    grid-template-columns: 0.13fr 2fr 1.5fr;
+    grid-template-columns: 0.13fr 2fr 1.1fr;
     font-size: 15px;
 }
 

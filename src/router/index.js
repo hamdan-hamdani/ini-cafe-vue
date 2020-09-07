@@ -8,6 +8,11 @@ import History from '../views/Main/history/history.vue'
 // import Main from '../views/Main/index.vue'
 import Product from '../views/Main/product/product.vue'
 import Card from '../components/_base/card.vue'
+import About from '../views/About.vue'
+import Login from '../views/Auth/login/login.vue'
+import Register from '../views/Auth/register/register.vue'
+import Store from '../store/index'
+import Chart from '../components/_base/chart/chart.vue'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -21,12 +26,31 @@ const routes = [{
 {
   path: '/update',
   name: 'update',
-  component: UpdateProduct
+  component: UpdateProduct,
+  meta: { requiresAuth: true }
+},
+{
+  path: '/login',
+  name: 'login',
+  component: Login,
+  meta: { requiresVisitor: true }
+},
+{
+  path: '/register',
+  name: 'register',
+  component: Register,
+  meta: { requiresVisitor: true }
+},
+{
+  path: '/about',
+  name: 'About',
+  component: About
 },
 {
   path: '/',
   name: 'home',
-  component: Home
+  component: Home,
+  meta: { requiresAuth: true }
 },
 {
   path: '/admin',
@@ -47,6 +71,11 @@ const routes = [{
   path: '/history',
   name: 'History',
   component: History
+},
+{
+  path: '/chart',
+  name: 'Chart',
+  component: Chart
 }
 // {
 //   path: '/home',
@@ -73,6 +102,32 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!Store.getters.isLogin) {
+      next({
+        path: '/login'
+        // query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else if (to.matched.some(record => record.meta.requiresVisitor)) {
+    if (Store.getters.isLogin) {
+      next({
+        path: '/'
+        // query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

@@ -35,7 +35,7 @@
                 <span><select name="month" id="month">
                         <option value="month">Month</option>
                     </select></span>
-                <div></div>
+                <Chart/>
             </div>
             <div class="recent-order">
                 <span>Recent Order</span>
@@ -46,15 +46,15 @@
                     <span>INVOICES</span>
                     <span>CASHIER</span>
                     <span>DATE</span>
-                    <span>ORDERS</span>
+                    <!-- <span>ORDERS</span> -->
                     <span>AMOUNT</span>
                 </div>
-                <div>
-                    <span>#10928</span>
-                    <span>Cashier 1</span>
-                    <span>06 October 2019</span>
-                    <span>Ice Tea, Salad With peanut sauce</span>
-                    <span>Rp. 120.000</span>
+                <div v-for="tmp in tmpArray" :key="tmp.id">
+                    <span>{{tmp.invoice}}</span>
+                    <span>{{tmp.cashier}}</span>
+                    <span>{{tmp.date}}</span>
+                    <!-- <span>Ice Tea, Salad With peanut sauce</span> -->
+                    <span>{{tmp.amount}}</span>
                 </div>
             </div>
         </main>
@@ -65,14 +65,53 @@
 import Navbar from '../../../components/_base/navbar/navbar'
 import Cart from '../../../components/_base/navbar/cart'
 import Sidebar from '../../../components/_base/sidebar/sidebar'
+import Chart from '../../../components/_base/chart/chart.vue'
+import axios from 'axios'
 export default {
   name: 'History',
+  data () {
+    return {
+      tmpArray: ''
+    }
+  },
   components: {
     Navbar,
     Cart,
-    Sidebar
+    Sidebar,
+    Chart
+  },
+  methods: {
+    getHistory () {
+      axios.get('http://localhost:4000/api/v1/histories/')
+        .then(res => {
+          console.log(res.data.result)
+          this.tmpArray = res.data.result
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  },
+  mounted () {
+    this.getHistory()
   }
 }
+
+// getHistory () {
+//       axios.get('http://localhost:4000/api/v1/histories/')
+//         .then(res => {
+//           console.log(res.data.result)
+//           this.tmpArray = res.data.result
+//         })
+//         .catch(err => {
+//           console.log(err)
+//         })
+//     }
+
+// mounted: {
+//       this.getHistory()
+//   }
+
 </script>
 
 <style scoped>

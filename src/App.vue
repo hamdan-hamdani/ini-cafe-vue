@@ -8,6 +8,22 @@
   <!-- </div> -->
 </template>
 
+<script>
+import { mapActions } from 'vuex'
+export default {
+  name: 'App',
+  methods: {
+    ...mapActions(['interceptorsRequest', 'interceptorsResponse'])
+  },
+  created () {
+    console.log('err dong')
+    this.interceptorsRequest()
+    this.interceptorsResponse('bbbb')
+      .catch(err => console.log(err))
+  }
+}
+</script>
+
  <style>
 
 /* html,body {

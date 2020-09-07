@@ -1,17 +1,17 @@
 <template>
     <div class="header">
         <header>
-            <img src="../../../assets/img/menu.png" alt="menu">
+            <router-link to="/"><img src="../../../assets/img/menu.png" alt="menu"></router-link>
             <h1>Foods Items</h1>
             <img v-show="search" v-on:click="searchbtn" src="../../../assets/img/search.png" alt="search">
-            <div v-show="!search"><input type="text" v-model="wordsearch" @keypress.enter="searchNavbar()" name="" id=""></div>
+            <div v-show="!search"><input type="text" v-model="wordsearch" @keyup="searchNavbar" name="" id=""></div>
         </header>
     </div>
 </template>
 
 <script>
 // import axios from 'axios'
-
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Navbar',
   data () {
@@ -25,9 +25,14 @@ export default {
       this.search = false
     },
     searchNavbar () {
-      this.$root.$emit('newSearch', this.wordsearch)
-      this.wordsearch = ''
-    }
+      // this.$root.$emit('newSearch', this.wordsearch)
+      // this.wordsearch = ''
+      this.actSearch(this.wordsearch)
+    },
+    ...mapActions(['actSearch'])
+  },
+  computed: {
+    ...mapGetters(['getSearch'])
   }
   //   data () {
   //     return {

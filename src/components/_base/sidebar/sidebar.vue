@@ -3,10 +3,11 @@
         <div>
             <router-link class="rtr-li" to="/update"></router-link>
             <router-link class="rtr-li2" to="/history"></router-link>
-            <!-- <img src="../../../assets/img/clipboard.png" alt="" srcset=""> -->
             <img v-on:click="addItem" src="../../../assets/img/add.png" alt="" srcset="">
+            <div @click="rtrli3" class="rtr-li3"></div>
         </div>
-        <div v-if="isActiveAddItem" class="container-chekcout">
+        <ModalAddUpdate/>
+        <!-- <div v-if="isActiveAddItem" class="container-chekcout">
             <div class="modal-add-item">
                 <div class="add-item-checkout">
                     <span>Add Item</span>
@@ -20,12 +21,13 @@
                         <label for="category">Category</label>
                     </div>
                     <div class="price">
-                        <input type="text" v-model="data2.nameProduct" name="name" id="name">
-                        <input type="text" v-model="data2.image" name="image" id="image">
+                        <input v-focus type="text" v-model="data2.nameProduct" name="name" id="name">
+
+                        <input type="file" ref="file" @change="selectFile"  name="image" id="image">
                         <input type="number" v-model="data2.price" name="price" id="price">
                         <input type="text" v-model="data2.qty" id="qty">
                         <select name="category" id="category" v-model="data2.idCategory" >
-                            <option v-for="category in categories" :key="category.id" v-bind:value="category.id">{{category.nameCategory}} {{data2.idCategory}}</option>
+                            <option v-for="category in categories" :key="category.id" v-bind:value="category.id">{{category.nameCategory}}</option>
                         </select>
                     </div>
                 </div>
@@ -34,32 +36,18 @@
                     <button v-on:click="send">Send Add</button>
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- <main>
-            <div class="card-main" v-for="item in products" :key="item.id">
-                <img src="../../../assets/img/foods/food1.jpg" alt="">
-                <p>{{item.nameProduct}}</p>
-                <p>{{`Rp. ${item.price}`}}</p>
-            </div>
-        </main>
-        <div class="your-cart">
-            <div class="container-your-cart">
-                <img src="../../../assets/img/food.png" alt="" srcset="">
-                <span>Your cart is empty</span>
-                <span>Please add some items from the menu</span>
-            </div>
         </div> -->
-    <!-- </div> -->
+    </div>
 </template>
 
 <script>
 import axios from 'axios'
-
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import ModalAddUpdate from '../modal/modalAddUpdate'
 export default {
+  name: 'Sidebar',
   data () {
     return {
-    //   products: [],
       categories: [],
       isActiveAddItem: false,
       data2: {
@@ -72,7 +60,34 @@ export default {
 
     }
   },
+  components: {
+    ModalAddUpdate
+  },
+  directives: {
+    focus: {
+      inserted: function (el) {
+        el.focus()
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(['getlastpage'])
+  },
   methods: {
+    ...mapMutations(['mutActive', 'mutActiveAddUpdate']),
+    ...mapActions(['actAddProduct', 'actAllProducts', 'actNextPage']),
+    selectFile () {
+      this.data2.image = this.$refs.file.files[0]
+    },
+    // async sendFile () {
+    //   const formData = new FormData()
+    //   formData.append('file', this.file)
+    //   try {
+    //     await axios.post('http://localhost:4000/api/v1/products/', formData)
+    //   } catch (err) {
+    //     console.log(err)
+    //   }
+    // },
     // getData () {
     //   axios.get('http://localhost:4000/api/v1/products')
     //     .then((res) => {
@@ -81,6 +96,11 @@ export default {
     //     })
     //     .catch(err => alert(err))
     // },
+    rtrli3 () {
+      // alert('ba')
+      localStorage.removeItem('token')
+      this.$router.push('/login')
+    },
     getCategory () {
       axios.get('http://localhost:4000/api/v1/categories')
         .then((res) => {
@@ -89,11 +109,12 @@ export default {
         .catch(err => alert(err))
     },
     addItem: function () {
-      this.isActiveAddItem = true
+      // alert('coba')
+      this.mutActiveAddUpdate(true)
     },
-    cancel: function () {
-      this.isActiveAddItem = false
-    },
+    // cancel: function () {
+    //   this.isActiveAddItem = false
+    // },
     sendDataItem: function () {
       const dataItem = {
         idCategory: this.data2.idCategory,
@@ -110,15 +131,37 @@ export default {
           this.data2.image = ''
           this.data2.qty = 0
           alert('Saving success')
-        //   this.isActiveAddItem = false
         })
         .catch(err => console.log(err))
-    },
-    send: function () {
-      this.$root.$emit('SenndingData', this.sendDataItem)
-      alert('sav')
-      this.isActiveAddItem = false
     }
+    // send: function () {
+    //   alert('sav')
+    //   return new Promise((resolve, reject) => {
+    //     const formData = new FormData()
+    //     formData.append('idCategory', this.data2.idCategory)
+    //     formData.append('nameProduct', this.data2.nameProduct)
+    //     formData.append('price', this.data2.price)
+    //     formData.append('file', this.data2.image)
+    //     formData.append('qty', this.data2.qty)
+    //     axios.post('http://localhost:4000/api/v1/products/', formData)
+    //       .then(res => {
+    //         this.data2.idCategory = ''
+    //         this.data2.nameProduct = ''
+    //         this.data2.price = 0
+    //         this.data2.image = ''
+    //         this.data2.qty = 0
+    //         alert('Saving success')
+    //         // this.actAllProducts()
+    //         this.actNextPage(this.getlastpage)
+    //         resolve(res)
+    //       })
+    //       .catch(err => {
+    //         console.log(err)
+    //         reject(err)
+    //       })
+    //     this.isActiveAddItem = false
+    //   })
+    // }
   },
   mounted () {
     this.getCategory()
@@ -127,6 +170,15 @@ export default {
 </script>
 
 <style scoped>
+.rtr-li3 {
+    display: block;
+    width: 25px;
+    height: 25px;
+    background-image: url('../../../assets/img/signout.png');
+    background-size: cover;
+    box-sizing: border-box;
+    margin-top: 25px;
+}
 .rtr-li2 {
     display: block;
     width: 25px;

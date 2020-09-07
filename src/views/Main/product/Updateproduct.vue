@@ -1,26 +1,8 @@
 <template>
     <div class="container">
-        <!-- <header>
-            <img src="../../../assets/img/menu.png" alt="menu">
-            <h1>Foods Items</h1>
-            <img src="../../../assets/img/search.png" alt="search">
-        </header> -->
         <Navbar/>
         <Cart/>
         <Sidebar/>
-        <!-- <Main/> -->
-        <!-- <div class="cart">
-            <span class="title">Cart</span>
-            <span class="badge">0</span>
-        </div> -->
-        <!-- <div> -->
-            <!-- <div>
-                <div>
-                <router-link class="rtr-li" to="/update"></router-link>
-                </div>
-                <img src="../../../assets/img/clipboard.png" alt="" srcset="">
-                <img v-on:click="addItem" src="../../../assets/img/add.png" alt="" srcset="">
-            </div> -->
             <div v-if="isActiveEdit" class="container-chekcout">
                 <div class="modal-add-item">
                     <div class="add-item-checkout">
@@ -35,13 +17,15 @@
                             <label for="category">Category</label>
                         </div>
                         <div class="price">
-                            <input type="text" v-model="data2.nameProduct" name="name" id="name">
-                            <input type="text" v-model="data2.image" name="image" id="image">
-                            <input type="number" v-model="data2.price" name="price" id="price">
-                            <input type="text" v-model="data2.qty" id="qty">
-                            <select name="category" id="category" v-model="data2.idCategory" >
-                                <option v-for="category in categories" :key="category.id" v-bind:value="category.id"> {{category.nameCategory}}</option>
-                            </select>
+                            <form enctype="multipart/form-data">
+                                <input type="text" v-model="data2.nameProduct" name="name" id="name">
+                                <input type="file" @change="selectFile" ref="file" name="image" id="image">
+                                <input type="number" v-model="data2.price" name="price" id="price">
+                                <input type="text" v-model="data2.qty" id="qty">
+                                <select name="category" id="category" v-model="data2.idCategory" >
+                                    <option v-for="category in categories" :key="category.id" v-bind:value="category.id"> {{category.nameCategory}}</option>
+                                </select>
+                            </form>
                         </div>
                     </div>
                     <div class="add-item-button">
@@ -50,52 +34,50 @@
                     </div>
                 </div>
             </div>
-        <!-- </div> -->
         <div class="main">
             <main>
-              <div class="card-main" v-for="item in products" :key="item.id" >
-                    <img src='../../../assets/img/foods/food1.jpg' alt="">
+              <div class="card-main" v-for="(item, index) in getProductsAll" :key="item.id" >
+                    <img :src='item.image' alt="">
                     <p>{{item.nameProduct}}</p>
                     <p>{{`Rp. ${item.price}`}}</p>
-                    <!-- <p>{{item.id}}</p> -->
                     <div class="btn">
-                    <button v-on:click="editData(item.id,item.idCategory,item.nameProduct,item.price,item.image,item.qty)">Edit</button>
+                    <button v-on:click="editData(item.id,item.idCategory,item.nameProduct,item.price,item.image,item.qty, index)">Edit</button>
                     <button v-on:click="deleteData(item.id)">Delete</button>
                     </div>
                 </div>
-<!-- <Card/> -->
+                <ButtonPagination/>
+                <!-- <div class="container-nav" v-for="(page, index) in getlastpage" :key="index">
+                    <span @click="nextPage(page)">{{page}}</span>
+                </div> -->
             </main>
-            <!-- <div class="your-cart">
-            </div> -->
+            <Modal :dData="dData"/>
     </div>
     </div>
 </template>
 
 <script>
-
+import Modal from '../../../components/_base/modal/modal'
+import ButtonPagination from '../../../components/_base/button/buttonPagination'
 import axios from 'axios'
-// import Card from '../../../components/_base/card'
 import Navbar from '../../../components/_base/navbar/navbar'
 import Cart from '../../../components/_base/navbar/cart'
 import Sidebar from '../../../components/_base/sidebar/sidebar'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 require('dotenv').config()
-// import Main from '../../../components/_base/mainmenu/mainmenu'
 export default {
   name: 'Update',
   components: {
-    // Card,
     Navbar,
     Cart,
-    Sidebar
-    // Main
+    Sidebar,
+    ButtonPagination,
+    Modal
   },
   data () {
     return {
       products: [],
       categories: [],
       currentproduct: [],
-      //   qty: 1,
-      //   indexCard: 1,
       qtys: [],
       total: [],
       ttop: 0,
@@ -106,13 +88,26 @@ export default {
         image: '',
         price: 0,
         qty: 0,
-        idCategory: 0
+        idCategory: 0,
+        index: 0
       },
       isActiveAddItem: false,
       isActiveEdit: false
     }
   },
+  computed: {
+    ...mapGetters(['gettotalCart', 'getSearch', 'getProductsAll', 'getTotalProducts', 'getlastpage', 'getActivBtnOK'])
+  },
   methods: {
+    ...mapActions(['actAllProducts', 'actNextPage']),
+    ...mapMutations(['mutActive', 'setMessage', 'mutActivBtnCancel', 'mutActivBtnOk']),
+    nextPage (page) {
+      alert('Page berikutnya ' + page)
+      this.actNextPage(page)
+    },
+    selectFile () {
+      this.data2.image = this.$refs.file.files[0]
+    },
     addItem: function () {
       this.isActiveAddItem = true
     },
@@ -131,23 +126,42 @@ export default {
         .catch(err => alert(err))
       this.getCategory()
     },
-    editData (id, idCategory, nameProduct, price, image, qty) {
+    editData (id, idCategory, nameProduct, price, image, qty, index) {
+      console.log(idCategory)
       this.data2.nameProduct = nameProduct
       this.data2.idCategory = idCategory
       this.data2.price = price
       this.data2.image = image
       this.data2.qty = qty
       this.data2.id = id
+      this.data2.index = index
       this.isActiveEdit = true
     },
     deleteData (id) {
-    //   alert('Yakin mau menghapus ?')
-      axios.delete('http://localhost:4000/api/v1/products/' + id)
+      this.mutActive(true)
+      this.setMessage('Yakin Mau Menghapus')
+      this.mutActivBtnCancel(true)
+      this.mutActivBtnOk(true)
+      this.data2.id = id
+      alert('yahs')
+    //   if (this.getActivBtnOK) {
+    //     axios.delete('http://localhost:4000/api/v1/products/' + id)
+    //       .then((res) => {
+    //         alert('Delete success' + this.data2.id)
+    //         this.isActiveEdit = false
+    //         this.actAllProducts()
+    //       })
+    //       .catch(err => console.log(err))
+    //   } else {
+    //     alert('te')
+    //   }
+    },
+    dData () {
+      axios.delete('http://localhost:4000/api/v1/products/' + this.data2.id)
         .then((res) => {
-        //   this.categories = res.data.result
           alert('Delete success' + this.data2.id)
           this.isActiveEdit = false
-          this.getData()
+          this.actAllProducts()
         })
         .catch(err => console.log(err))
     },
@@ -155,27 +169,48 @@ export default {
       this.isActiveEdit = false
     },
     sendEdit () {
-      const dataEdit = {
-        idCategory: this.data2.idCategory,
-        nameProduct: this.data2.nameProduct,
-        price: this.data2.price,
-        image: this.data2.image,
-        qty: this.data2.qty
-      }
-      //   console.log(process.env.SEND_EDIT)
-      axios.patch('http://localhost:4000/api/v1/products/' + this.data2.id, dataEdit)
-        .then((res) => {
-        //   this.categories = res.data.result
-        // 'http://localhost:4000/api/v1/products/'
-          alert('Edit success' + this.data2.id)
-          this.isActiveEdit = false
-          this.getData()
-        })
-        .catch(err => console.log(err))
+      alert('sav')
+      return new Promise((resolve, reject) => {
+        const formData = new FormData()
+        formData.append('idCategory', this.data2.idCategory)
+        formData.append('nameProduct', this.data2.nameProduct)
+        formData.append('price', this.data2.price)
+        formData.append('file', this.data2.image)
+        formData.append('qty', this.data2.qty)
+        axios.patch('http://localhost:4000/api/v1/products/' + this.data2.id, formData)
+          .then(res => {
+            // const currentPage = (this.data2.index + 1) % 3
+            // this.data2.index + 3
+            // if (currentPage === 0) {
+            //   const page = this.data2.index / 3
+            //   this.actNextPage(page)
+            // }
+            this.actAllProducts()
+            this.data2.idCategory = ''
+            this.data2.nameProduct = ''
+            this.data2.price = 0
+            this.data2.image = ''
+            this.data2.qty = 0
+            this.data2.index = 0
+            alert('Saving success')
+            this.mutActive(true)
+            this.setMessage('Data berhasil diedit')
+            // this.$root.$emit('SenndingData')
+            // this.getData()
+            // this.getProductsAll()
+            resolve(res)
+          })
+          .catch(err => {
+            console.log(err)
+            reject(err)
+          })
+        this.isActiveEdit = false
+      })
     }
   },
   mounted () {
-    this.getData()
+    this.getCategory()
+    this.actAllProducts()
   },
   created () {
     this.$root.$on('newTask', task => {
