@@ -59,12 +59,11 @@ export default {
       this.task = ''
     },
     getData () {
-      axios.get('http://localhost:4000/api/v1/products')
+      axios.get('http://api-inicafe.fwdev.online/api/v1/products')
         .then((res) => {
           this.products = res.data.result
         })
-        .catch(err => alert(err))
-    //   this.getCategory()
+        .catch(err => console.log(err))
     },
     editData (id, idCategory, nameProduct, price, image, qty) {
       this.data2.nameProduct = nameProduct
@@ -76,11 +75,8 @@ export default {
       this.isActiveEdit = true
     },
     deleteData (id) {
-      alert('Yakin mau menghapus ?')
-      axios.delete('http://localhost:4000/api/v1/products/' + id)
+      axios.delete('http://api-inicafe.fwdev.online/api/v1/products/' + id)
         .then((res) => {
-        //   this.categories = res.data.result
-          alert('Delete success' + this.data2.id)
           this.isActiveEdit = false
           this.getData()
         })

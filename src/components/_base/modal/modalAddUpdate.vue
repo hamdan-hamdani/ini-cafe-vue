@@ -14,7 +14,6 @@
                 </div>
                 <div class="price">
                     <input v-focus type="text" v-model="data2.nameProduct" name="name" id="name">
-                        <!-- <input type="text" v-model="data2.image" name="image" id="image"> -->
                     <input type="file" ref="file" @change="selectFile"  name="image" id="image">
                     <input type="number" v-model="data2.price" name="price" id="price">
                     <input type="text" v-model="data2.qty" id="qty">
@@ -71,11 +70,11 @@ export default {
       this.data2.image = this.$refs.file.files[0]
     },
     getCategory () {
-      axios.get('http://localhost:4000/api/v1/categories')
+      axios.get('http://api-inicafe.fwdev.online/api/v1/categories')
         .then((res) => {
           this.categories = res.data.result
         })
-        .catch(err => alert(err))
+        .catch(err => console.log(err))
     },
     send: function () {
       return new Promise((resolve, reject) => {
@@ -85,15 +84,13 @@ export default {
         formData.append('price', this.data2.price)
         formData.append('file', this.data2.image)
         formData.append('qty', this.data2.qty)
-        axios.post('http://localhost:4000/api/v1/products/', formData)
+        axios.post('http://api-inicafe.fwdev.online/api/v1/products/', formData)
           .then((res) => {
             this.data2.idCategory = ''
             this.data2.nameProduct = ''
             this.data2.price = 0
             this.data2.image = ''
             this.data2.qty = 0
-            alert('Saving success yes')
-            // this.actAllProducts()
             this.actNextPage(this.getlastpage)
             this.mutActive(true)
             this.setMessage('Data berhasil ditambah')
@@ -140,7 +137,6 @@ export default {
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
-    /* border: 1px solid red; */
 }
 
 .modal-add-item div {
@@ -212,9 +208,7 @@ export default {
 }
 
 .add-item-button button {
-    /* display: block; */
     padding: 10px;
-    /* width: 100%; */
     color: #ffffff;
     width: 107px;
     border: none;
@@ -233,7 +227,6 @@ export default {
 .add-item-button button:first-of-type {
     background: #F24F8A;
     margin-right: 10px;
-    /* margin-top: 10px; */
 }
 
 .price input, .price select {

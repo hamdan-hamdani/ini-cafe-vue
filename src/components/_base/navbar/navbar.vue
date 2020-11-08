@@ -10,7 +10,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Navbar',
@@ -25,8 +24,6 @@ export default {
       this.search = false
     },
     searchNavbar () {
-      // this.$root.$emit('newSearch', this.wordsearch)
-      // this.wordsearch = ''
       this.actSearch(this.wordsearch)
     },
     ...mapActions(['actSearch'])
@@ -34,25 +31,6 @@ export default {
   computed: {
     ...mapGetters(['getSearch'])
   }
-  //   data () {
-  //     return {
-  //       products: []
-  //     }
-  //   },
-  //   methods: {
-  //     getData () {
-  //     //   axios.get('https://jsonplaceholder.typicode.com/photos')
-  //       axios.get('http://localhost:4000/api/v1/products')
-  //         .then((res) => {
-  //           this.products = res.data.result
-  //         })
-  //         .catch(err => alert(err))
-  //     }
-  //   },
-  //   mounted () {
-  //     this.getData()
-  //   }
-
 }
 </script>
 

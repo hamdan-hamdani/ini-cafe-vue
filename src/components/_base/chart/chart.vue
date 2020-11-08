@@ -89,7 +89,7 @@ export default {
       } else if (this.Category === 'desember') {
         this.Category = '12'
       }
-      axios.get('http://localhost:4000/api/v1/histories/?mo=' + this.Category)
+      axios.get('http://api-inicafe.fwdev.online/api/v1/histories/?mo=' + this.Category)
         .then(res => {
           // this.Category = 'agustus'
           console.log(res.data.result)

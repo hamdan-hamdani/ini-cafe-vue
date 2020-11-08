@@ -87,9 +87,8 @@ export default new Vuex.Store({
   actions: {
     actAllProducts (setex) {
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:4000/api/v1/products/?page=' + this.state.page + '&limit=' + this.state.limit)
+        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?page=' + this.state.page + '&limit=' + this.state.limit)
           .then(res => {
-            // alert('berhasil bro')
             setex.commit('setProduct', res.data.result)
             resolve(res.data.result)
           })
@@ -101,22 +100,12 @@ export default new Vuex.Store({
     },
     actAddProduct (setex, payload) {
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:4000/api/v1/products/', payload)
+        axios.post('http://api-inicafe.fwdev.online/api/v1/products/', payload)
           .then(async res => {
-          // this.data2.idCategory = ''
-          // this.data2.nameProduct = ''
-          // this.data2.price = 0
-          // this.data2.image = ''
-          // this.data2.qty = 0
-            alert('Saving success')
-            // this.$root.$emit('SenndingData')
-            // setex.commit('setAddProduct', res.data.result)
-            // await this.actAllProducts()
             resolve(res.data.result)
             return await new Promise((resolve, reject) => {
-              axios.get('http://localhost:4000/api/v1/products/?page=' + this.state.page + '&limit=' + this.state.limit)
+              axios.get('http://api-inicafe.fwdev.online/api/v1/products/?page=' + this.state.page + '&limit=' + this.state.limit)
                 .then(res => {
-                  alert('berhasil bro')
                   setex.commit('setProduct', res.data.result)
                   resolve(res.data.result)
                 })
@@ -135,11 +124,8 @@ export default new Vuex.Store({
     actNextPage (setex, payload) {
       console.log(payload)
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:4000/api/v1/products/?page=' + payload + '&limit=' + this.state.limit)
+        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?page=' + payload + '&limit=' + this.state.limit)
           .then((res) => {
-            // alert(bol)
-            // alert('berhasil bro')
-            // setex.commit('mutActive', bol)
             setex.commit('setProduct', res.data.result)
             resolve(res.data.result)
           })
@@ -150,23 +136,17 @@ export default new Vuex.Store({
       })
     },
     getTodos (setex, payload) {
-      // axios.get('https://jsonplaceholder.typicode.com/todos')
-      //   .then(res => {
-      //     setex.commit('setTodosu', res.data)
-      //   })
     },
     actMessage (setex, payload) {
       setex.commit('setMessage', payload)
     },
     actSearch (setex, payload) {
-      // alert(payload)
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:4000/api/v1/products/?search=' + payload)
+        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?search=' + payload)
           .then(res => {
             console.log('res')
             console.log(res)
             setex.commit('setSearch', res.data.result)
-            // localStorage.setItem('token', res.data.result.token)
             resolve(res.data.result)
           })
           .catch(err => {
@@ -178,7 +158,7 @@ export default new Vuex.Store({
     login (setex, payload) {
       console.log(payload)
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:4000/api/v1/users/login', payload)
+        axios.post('http://api-inicafe.fwdev.online/api/v1/users/login', payload)
           .then(res => {
             console.log('res')
             console.log(res)
@@ -194,9 +174,8 @@ export default new Vuex.Store({
     },
     send (setex, payload) {
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:4000/api/v1/users/register', payload)
+        axios.post('http://api-inicafe.fwdev.online/api/v1/users/register', payload)
           .then(res => {
-            // setex.commit('setRegister', res.data.result)
             resolve(res.data.result)
           })
           .catch(err => {
@@ -206,7 +185,7 @@ export default new Vuex.Store({
     },
     getProducts (setex) {
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:4000/api/v1/products/?page=1&limit=3')
+        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?page=1&limit=3')
           .then(res => {
             setex.commit('setProduct', res.data.result)
             resolve(res.data.result)
@@ -219,7 +198,6 @@ export default new Vuex.Store({
     },
     getRegister (setex) {
       return new Promise((resolve, reject) => {
-        // axios.get('')
       })
     },
     interceptorsRequest (setex, payload) {
@@ -250,7 +228,6 @@ export default new Vuex.Store({
         console.log('ini error response')
         console.log(error.response)
         if (error.response.status === 401 && error.response.data.result.message === 'token invalid') {
-          alert('Jangang coba-coba masukan token')
           localStorage.removeItem('token')
           setex.commit('setToken', null)
           Router.push('/login')
@@ -260,42 +237,15 @@ export default new Vuex.Store({
           setex.commit('setToken', null)
           Router.push('/login')
         } else if (error.response.status === 401 && error.response.data.result.message === 'data sudah ada') {
-          // alert('Email sudah digunakan')
           setex.commit('setMessage', error.response.data.result.message)
-          // localStorage.removeItem('token')
-          // setex.commit('setToken', null)
-          // Router.push('/login')
         } else if (error.response.status === 401 && error.response.data.result.message === 'Email Or Password Wrong') {
-          // alert('Email Or Password Wrong')
           setex.commit('setMessage', error.response.data.result.message)
-          // localStorage.removeItem('token')
-          // setex.commit('setToken', null)
-          // Router.push('/login')
         }
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error
         return Promise.reject(error)
       })
     }
-
-    // interceptorsResponse () {
-    //   axios.interceptors.response.use(function (response) {
-    //     return response
-    //   }, function (error) {
-    //     console.log('kajahj')
-    //     console.log(error.response)
-    //     return Promise.reject(error)
-    //   })
-    // },
-    // interceptorsRequest (setex) {
-    //   axios.interceptors.request.use(function (config) {
-    //     config.headers.Authorization = `Bearer ${setex.state.token}`
-    //     return config
-    //   }, function (error) {
-    //     console.log(error)
-    //     return Promise.reject(error)
-    //   })
-    // }
   },
   getters: {
     gettotalCart (state) {

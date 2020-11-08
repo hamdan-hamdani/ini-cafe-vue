@@ -46,9 +46,6 @@
                     </div>
                 </div>
                 <ButtonPagination/>
-                <!-- <div class="container-nav" v-for="(page, index) in getlastpage" :key="index">
-                    <span @click="nextPage(page)">{{page}}</span>
-                </div> -->
             </main>
             <Modal :dData="dData"/>
     </div>
@@ -102,7 +99,6 @@ export default {
     ...mapActions(['actAllProducts', 'actNextPage']),
     ...mapMutations(['mutActive', 'setMessage', 'mutActivBtnCancel', 'mutActivBtnOk']),
     nextPage (page) {
-      alert('Page berikutnya ' + page)
       this.actNextPage(page)
     },
     selectFile () {
@@ -123,7 +119,7 @@ export default {
         .then((res) => {
           this.products = res.data.result
         })
-        .catch(err => alert(err))
+        .catch(err => console.log(err))
       this.getCategory()
     },
     editData (id, idCategory, nameProduct, price, image, qty, index) {
@@ -143,23 +139,10 @@ export default {
       this.mutActivBtnCancel(true)
       this.mutActivBtnOk(true)
       this.data2.id = id
-    //   alert('yahs')
-    //   if (this.getActivBtnOK) {
-    //     axios.delete('http://localhost:4000/api/v1/products/' + id)
-    //       .then((res) => {
-    //         alert('Delete success' + this.data2.id)
-    //         this.isActiveEdit = false
-    //         this.actAllProducts()
-    //       })
-    //       .catch(err => console.log(err))
-    //   } else {
-    //     alert('te')
-    //   }
     },
     dData () {
       axios.delete('http://api-inicafe.fwdev.online/api/v1/products/' + this.data2.id)
         .then((res) => {
-          alert('Delete success' + this.data2.id)
           this.isActiveEdit = false
           this.actAllProducts()
         })
@@ -169,7 +152,6 @@ export default {
       this.isActiveEdit = false
     },
     sendEdit () {
-      alert('sav')
       return new Promise((resolve, reject) => {
         const formData = new FormData()
         formData.append('idCategory', this.data2.idCategory)
@@ -179,12 +161,6 @@ export default {
         formData.append('qty', this.data2.qty)
         axios.patch('http://api-inicafe.fwdev.online/api/v1/products/' + this.data2.id, formData)
           .then(res => {
-            // const currentPage = (this.data2.index + 1) % 3
-            // this.data2.index + 3
-            // if (currentPage === 0) {
-            //   const page = this.data2.index / 3
-            //   this.actNextPage(page)
-            // }
             this.actAllProducts()
             this.data2.idCategory = ''
             this.data2.nameProduct = ''
@@ -192,12 +168,8 @@ export default {
             this.data2.image = ''
             this.data2.qty = 0
             this.data2.index = 0
-            alert('Saving success')
             this.mutActive(true)
             this.setMessage('Data berhasil diedit')
-            // this.$root.$emit('SenndingData')
-            // this.getData()
-            // this.getProductsAll()
             resolve(res)
           })
           .catch(err => {
@@ -214,7 +186,6 @@ export default {
   },
   created () {
     this.$root.$on('newTask', task => {
-      alert(task)
     })
   }
 }
@@ -243,10 +214,6 @@ export default {
     height: 25px;
 }
 
-/* header */
-/* .header {
-    grid-area: header;
-} */
 header {
     grid-area: header;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
@@ -318,7 +285,6 @@ header h1 {
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
-    /* border: 1px solid red; */
 }
 
 .modal-add-item div {
@@ -390,9 +356,7 @@ header h1 {
 }
 
 .add-item-button button {
-    /* display: block; */
     padding: 10px;
-    /* width: 100%; */
     color: #ffffff;
     width: 107px;
     border: none;
@@ -411,17 +375,11 @@ header h1 {
 .add-item-button button:first-of-type {
     background: #F24F8A;
     margin-right: 10px;
-    /* margin-top: 10px; */
 }
 
 main {
       grid-area: main;
-      /* border: 1px solid red; */
       box-sizing: border-box;
-      /* display: grid;
-    grid-template-areas:
-        "main your-cart";
-    grid-template-columns: 1.34fr 1fr ; */
 }
 
 main {
@@ -431,7 +389,6 @@ main {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    /* width: 57.2%; */
     box-sizing: border-box;
 }
 
@@ -477,8 +434,6 @@ main .card-main {
 .your-cart {
     grid-area: your-cart;
     margin-top: 55px;
-    /* display: inline-block; */
-    /* border: 1px solid black; */
     box-sizing: border-box;
 }
 
@@ -498,16 +453,13 @@ main .card-main {
 
 .your-cart {
     width: 100%;
-    /* margin: 0 auto; */
     margin-top: 10px;
-    /* border: 1px solid; */
     box-sizing: border-box;
     text-align: left;
 }
 
 .your-cart .item-cart {
     padding: 15px;
-    /* border: 1px solid red; */
     box-sizing: border-box;
     display: grid;
     grid-template-areas:
@@ -519,8 +471,6 @@ main .card-main {
 .your-cart .item-cart img {
     grid-area: img;
     width: 100%;
-    /* min-width: 118px; */
-    /* border: 1px solid; */
     height: 60px;
     max-height: 60px;
 }
@@ -535,7 +485,6 @@ main .card-main {
     margin-left: 10px;
     justify-self: start;
     align-self: end;
-    /* background-color: rgba(130, 222, 58, 0.2); */
 }
 
 .your-cart .item-cart .item-price {
@@ -572,7 +521,6 @@ main .card-main {
 .your-cart .item-cart .button input {
     display: inline-block;
     font-size: 21px;
-    /* width: 20px; */
 }
 
 .your-cart span:nth-child(3) {
@@ -582,7 +530,6 @@ main .card-main {
 
 .your-cart .bottom {
     padding: 15px;
-    /* border: 1px solid red; */
     box-sizing: border-box;
     margin-top: 157px !important;
 }
@@ -590,7 +537,6 @@ main .card-main {
 .bottom .total {
     display: flex;
     flex-wrap: wrap;
-    /* border: 1px solid green; */
     box-sizing: border-box;
 }
 
@@ -642,7 +588,6 @@ main .card-main {
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
-    /* border: 1px solid red; */
 }
 
 .modal-checkout div {
@@ -670,7 +615,6 @@ main .card-main {
 .modal-checkout .item-name {
     display: grid;
     grid-template-areas: "name price";
-        /* "total total"; */
     grid-template-columns: repeat(2, minmax(150px, 1fr));
     grid-template-rows: .5fr;
 }
@@ -691,9 +635,6 @@ main .card-main {
 
 /* .item-name */
  .total {
-    /* grid-area: total; */
-    /* align-self: start;
-    justify-self: end; */
     text-align: right;
 }
 

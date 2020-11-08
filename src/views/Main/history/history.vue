@@ -46,14 +46,12 @@
                     <span>INVOICES</span>
                     <span>CASHIER</span>
                     <span>DATE</span>
-                    <!-- <span>ORDERS</span> -->
                     <span>AMOUNT</span>
                 </div>
                 <div v-for="tmp in tmpArray" :key="tmp.id">
                     <span>{{tmp.invoice}}</span>
                     <span>{{tmp.cashier}}</span>
                     <span>{{tmp.date}}</span>
-                    <!-- <span>Ice Tea, Salad With peanut sauce</span> -->
                     <span>{{tmp.amount}}</span>
                 </div>
             </div>
@@ -82,7 +80,7 @@ export default {
   },
   methods: {
     getHistory () {
-      axios.get('http://localhost:4000/api/v1/histories/')
+      axios.get('http://api-inicafe.fwdev.online/api/v1/histories/')
         .then(res => {
           console.log(res.data.result)
           this.tmpArray = res.data.result
@@ -97,51 +95,26 @@ export default {
   }
 }
 
-// getHistory () {
-//       axios.get('http://localhost:4000/api/v1/histories/')
-//         .then(res => {
-//           console.log(res.data.result)
-//           this.tmpArray = res.data.result
-//         })
-//         .catch(err => {
-//           console.log(err)
-//         })
-//     }
-
-// mounted: {
-//       this.getHistory()
-//   }
-
 </script>
 
 <style scoped>
-/* .container img {
-    width: 25px;
-    height: 25px;
-} */
 
 main {
     grid-area: main;
-    /* background-color: darkgray; */
-    /* background: rgba(190, 195, 202, 0.3); */
     padding: 20px;
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    /* align-content: space-between; */
 }
 
 main .income {
     flex: 100%;
     display: flex;
     justify-content: space-between;
-    /* border: 1px solid red; */
 }
 
 main .income span {
-    /* display: inline-block;
-    width: 300px; */
     height: 150px;
     max-height: 150px;
     width: 33%;
@@ -150,8 +123,6 @@ main .income span {
     border-radius: 10px;
     align-self: center;
     box-sizing: border-box;
-    /* background-color: rgb(41, 41, 182); */
-    ;
 }
 
 main .income span:first-of-type {
@@ -213,7 +184,6 @@ main .recent-order {
     width: 100%;
     margin-top: 30px;
     display: flex;
-    /* background-color: hotpink; */
     flex-wrap: wrap;
     padding: 15px;
     box-sizing: border-box;
@@ -231,7 +201,6 @@ main .recent-order {
 main .revenue span,
 main .recent-order span {
     flex: 1;
-    /* border: 1px solid green; */
 }
 
 main .revenue span:nth-child(2),
@@ -265,8 +234,6 @@ main .recent-order div {
 main .card-main {
     display: inline-block;
     width: 30% !important;
-    /* border: 1px solid green; */
-    /* height: 160px; */
     margin-bottom: 10px;
 }
 

@@ -73,7 +73,7 @@
         </div>
         <div class="item-button">
           <span>Payment: Cash</span>
-          <button v-on:click="print">Print</button>
+          <button v-on:click="print">Prints</button>
           <span>Or</span>
           <button>Send Email</button>
         </div>
@@ -128,7 +128,7 @@ export default {
     sorting () {
       // let sort = ''
       if (this.sorti === 'A - Z') {
-        axios.get('http://localhost:4000/api/v1/products/?sort=nameProduct&order=asc')
+        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?sort=nameProduct&order=asc')
           .then(res => {
             this.setProduct(res.data.result)
           })
@@ -136,7 +136,7 @@ export default {
             console.log(err)
           })
       } else if (this.sorti === 'Z - A') {
-        axios.get('http://localhost:4000/api/v1/products/?sort=nameProduct&order=desc')
+        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?sort=nameProduct&order=desc')
           .then(res => {
             this.setProduct(res.data.result)
           })
@@ -144,7 +144,7 @@ export default {
             console.log(err)
           })
       } else if (this.sorti === 'Price A-Z') {
-        axios.get('http://localhost:4000/api/v1/products/?sort=price&order=asc')
+        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?sort=price&order=asc')
           .then(res => {
             this.setProduct(res.data.result)
           })
@@ -152,7 +152,7 @@ export default {
             console.log(err)
           })
       } else if (this.sorti === 'Price Z-A') {
-        axios.get('http://localhost:4000/api/v1/products/?sort=price&order=desc')
+        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?sort=price&order=desc')
           .then(res => {
             this.setProduct(res.data.result)
           })
@@ -164,7 +164,6 @@ export default {
     ...mapMutations(['settotalCart', 'setProduct']),
     ...mapActions(['actAllProducts', 'actNextPage']),
     nextPage (page) {
-      alert('Page berikutnya ' + page)
       this.actNextPage(page)
     },
     getData () {
@@ -172,17 +171,14 @@ export default {
         .then((res) => {
           this.products = res.data.result
         })
-        .catch(err => alert(err))
+        .catch(err => console.log(err))
     },
     delItem (index, id) {
-      alert('hapus item ' + index + ' ' + id)
       this.currentproduct.splice(index, 1)
-      alert(this.qtys[id])
       for (let i = 1; i <= this.qtys[id]; i++) {
         this.totalCart.pop()
         this.$store.commit('settotalCart', this.totalCart.length)
       }
-      alert(id + ' id')
       this.total.splice(id, 1)
       this.qtys.splice(id, 1, undefined)
       console.log(this.total)
@@ -300,7 +296,6 @@ export default {
       }
       axios.post(process.env.VUE_APP_HISTORY, kirimData)
         .then((res) => {
-          alert('saving sukses')
           this.isActive = false
         })
         .catch(err => console.log(err))

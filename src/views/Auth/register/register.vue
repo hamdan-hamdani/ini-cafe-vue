@@ -9,7 +9,7 @@
             <input class="inp" @click="isActiv" v-model="password" type="password" id="password">
             <p v-if="passWarning" class="msg">{{warningMessPass}}</p>
             <label class="lbl" for="roleId">Role Id : </label>
-            <input class="inp" type="text" id="roleId" v-model="roleId">
+            <input class="inp" placeholder="Masukan 1 untuk admin, 2 untuk user" type="text" id="roleId" v-model="roleId">
             <label class="lbl" for="firstName">FirstName : </label>
             <input class="inp" type="text" id="firstName" v-model="firstName">
             <label class="lbl" for="lastName">LastName : </label>

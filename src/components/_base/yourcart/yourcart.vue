@@ -11,16 +11,13 @@
           <img class="img" src="../../../assets/img/foods/food2.jpg" alt="" srcset="">
           <span class="item-name">{{ nproduct.nProduct }} - {{ index }}</span>
           <div class="button">
-              <!-- <button v-on:click="buttonMin">-</button><input type="text" v-model="qty"><button v-on:click="buttonAdd(index, qty, nproduct.pp)">+</button> berhasil-->
               <button v-on:click="buttonMin(index, nproduct.pp)">- {{index}}</button><input type="text" v-model="qtys[index]"><button v-on:click="buttonAdd(index, nproduct.pp)">+</button>
           </div>
-          <!-- <span class="item-price">Rp. {{ qty * nproduct.pp }}</span> berhasil-->
           <span class="item-price">Rp. {{ qtys[index] * nproduct.pp }}</span>
         </div>
         <div class="bottom">
           <div class="total">
               <span>Total</span>
-              <!-- <span v-bind="totalS(qty, nproduct.pp)">Rp. {{total}} *</span> -->
               <span>Rp. {{ttop }} *</span>
               <span>*Belum termasuk ppn</span>
           </div>
@@ -40,17 +37,9 @@
         <div class="item-name" v-for="(nproduct, index) in currentproduct" :key="index">
           <div class="name">
             <span>{{nproduct.nProduct}}</span>
-                        <!-- <span>Coffee Latte 1x</span> -->
-                        <!-- <span>Black Forest 1x</span>
-                        <span>Salmon Truffle Teriyaki 1x</span>
-                        <span>Ppn 10%</span> -->
           </div>
           <div class="price">
             <span>{{ qtys[index] * nproduct.pp }}</span>
-                        <!-- <span>Rp. 15.000</span>
-                        <span>Rp. 30.000</span>
-                        <span>Rp. 60.000</span>
-                        <span>Rp. 10.500</span> -->
           </div>
         </div>
         <div class="total">
@@ -68,7 +57,6 @@
 </template>
 
 <script>
-// import Mainmenu from '../mainmenu/mainmenu'
 
 export default {
 

@@ -12,7 +12,6 @@
         <div class="left-bar">
             <div>
                 <div>
-                <!-- <img src="../../../assets/img/fork.png" to="/update" alt="" srcset=""> -->
                 <router-link class="rtr-li" to="/update"></router-link>
                 </div>
                 <img src="../../../assets/img/clipboard.png" alt="" srcset="">
@@ -48,17 +47,14 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="main"> -->
             <main>
                 <div class="card-main" v-for="(item, index) in products" :key="item.id" v-on:click="currentItem(item.image,item.nameProduct,item.price, index)">
-                    <!-- <div v-if="products.find(e => e)"> -->
                     <img src='../../../assets/img/foods/food1.jpg' alt="">
                     <p>{{item.nameProduct}}</p>
                     <p>{{`Rp. ${item.price}`}}</p>
                     <p>{{item.id}}</p>
                     <button v-on:click="tmbData">Tambah Data</button>
                     <button v-on:click="tmbData"><router-link to="/update">Update Data</router-link></button>
-                    <!-- </div> -->
                 </div>
             </main>
             <div class="your-cart">
@@ -130,8 +126,6 @@ export default {
       products: [],
       categories: [],
       currentproduct: [],
-      //   qty: 1,
-      //   indexCard: 1,
       qtys: [],
       total: [],
       ttop: 0,
@@ -151,7 +145,7 @@ export default {
   },
   methods: {
     getCategory () {
-      axios.get('http://localhost:4000/api/v1/categories')
+      axios.get('http://api-inicafe.fwdev.online/api/v1/categories')
         .then((res) => {
           this.categories = res.data.result
         })
@@ -168,30 +162,27 @@ export default {
         image: this.data2.image,
         qty: this.data2.qty
       }
-      axios.post('http://localhost:4000/api/v1/products', dataItem)
+      axios.post('http://api-inicafe.fwdev.online/api/v1/products', dataItem)
         .then((res) => {
-        //   this.categories = res.data.result
-          alert('Saving success')
           this.isActiveAddItem = false
           this.getData()
         })
         .catch(err => console.log(err))
     },
     getData () {
-      axios.get('http://localhost:4000/api/v1/products')
+      axios.get('http://api-inicafe.fwdev.online/api/v1/products')
         .then((res) => {
           this.products = res.data.result
         })
-        .catch(err => alert(err))
+        .catch(err => console.log(err))
       this.getCategory()
     },
     tmbData: function () {
-      axios.post('http://localhost:4000/api/v1/products', this.kmn)
+      axios.post('http://api-inicafe.fwdev.online/api/v1/products', this.kmn)
         .then((res) => {
           this.getData()
-          alert('Sukses menyimpan Data')
         })
-        .catch(err => alert(err))
+        .catch(err => console.log(err))
     },
     currentItem: function (img, name, price, index) {
       console.log('index card ' + index)
@@ -200,9 +191,6 @@ export default {
           this.qtys.push(1)
         }
       }
-      //   this.qtys[id] = this.qtys[id] - 1
-      //   const nana = this.qtys[id] * price
-      //   this.total[id] = nana
       if (this.total.length !== 0) {
         console.log('sebelum push')
         console.log(this.total)
@@ -223,9 +211,6 @@ export default {
         console.log('jumlah else')
         console.log(this.ttop)
       }
-      //   const ttop = this.total.reduce((ind1, ind2) => ind1 + ind2)
-      //   this.ttop = price
-      //   this.indexCard = index
       console.log(this.qtys[index])
       const dt = { image: img, nProduct: name, pp: price }
       this.currentproduct.push(dt)
@@ -244,7 +229,6 @@ export default {
       console.log(this.total)
       const ttop = this.total.reduce((ind1, ind2) => ind1 + ind2)
       this.ttop = ttop
-      //   console.log('ttop ' + ttop)
       console.log('this.ttop ')
       console.log(this.ttop)
     },
@@ -275,9 +259,8 @@ export default {
         cashier: 'hamdan',
         amount: this.ttop
       }
-      axios.post('http://localhost:4000/api/v1/histories/', kirimData)
+      axios.post('http://api-inicafe.fwdev.online/api/v1/histories/', kirimData)
         .then((res) => {
-          alert('saving sukses')
           this.isActive = false
         })
         .catch(err => console.log(err))
@@ -315,11 +298,6 @@ export default {
     width: 25px;
     height: 25px;
 }
-
-/* header */
-/* .header {
-    grid-area: header;
-} */
 header {
     grid-area: header;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
@@ -391,7 +369,6 @@ header h1 {
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
-    /* border: 1px solid red; */
 }
 
 .modal-add-item div {
@@ -463,9 +440,7 @@ header h1 {
 }
 
 .add-item-button button {
-    /* display: block; */
     padding: 10px;
-    /* width: 100%; */
     color: #ffffff;
     width: 107px;
     border: none;
@@ -484,17 +459,11 @@ header h1 {
 .add-item-button button:first-of-type {
     background: #F24F8A;
     margin-right: 10px;
-    /* margin-top: 10px; */
 }
 
 main {
       grid-area: main;
-      /* border: 1px solid red; */
       box-sizing: border-box;
-      /* display: grid;
-    grid-template-areas:
-        "main your-cart";
-    grid-template-columns: 1.34fr 1fr ; */
 }
 
 main {
@@ -504,7 +473,6 @@ main {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    /* width: 57.2%; */
     box-sizing: border-box;
 }
 
@@ -529,8 +497,6 @@ main .card-main {
 .your-cart {
     grid-area: your-cart;
     margin-top: 55px;
-    /* display: inline-block; */
-    /* border: 1px solid black; */
     box-sizing: border-box;
 }
 
@@ -550,16 +516,13 @@ main .card-main {
 
 .your-cart {
     width: 100%;
-    /* margin: 0 auto; */
     margin-top: 10px;
-    /* border: 1px solid; */
     box-sizing: border-box;
     text-align: left;
 }
 
 .your-cart .item-cart {
     padding: 15px;
-    /* border: 1px solid red; */
     box-sizing: border-box;
     display: grid;
     grid-template-areas:
@@ -571,8 +534,6 @@ main .card-main {
 .your-cart .item-cart img {
     grid-area: img;
     width: 100%;
-    /* min-width: 118px; */
-    /* border: 1px solid; */
     height: 60px;
     max-height: 60px;
 }
@@ -587,7 +548,6 @@ main .card-main {
     margin-left: 10px;
     justify-self: start;
     align-self: end;
-    /* background-color: rgba(130, 222, 58, 0.2); */
 }
 
 .your-cart .item-cart .item-price {
@@ -624,7 +584,6 @@ main .card-main {
 .your-cart .item-cart .button input {
     display: inline-block;
     font-size: 21px;
-    /* width: 20px; */
 }
 
 .your-cart span:nth-child(3) {
@@ -634,7 +593,6 @@ main .card-main {
 
 .your-cart .bottom {
     padding: 15px;
-    /* border: 1px solid red; */
     box-sizing: border-box;
     margin-top: 157px !important;
 }
@@ -642,7 +600,6 @@ main .card-main {
 .bottom .total {
     display: flex;
     flex-wrap: wrap;
-    /* border: 1px solid green; */
     box-sizing: border-box;
 }
 
@@ -694,7 +651,6 @@ main .card-main {
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
-    /* border: 1px solid red; */
 }
 
 .modal-checkout div {
@@ -722,7 +678,6 @@ main .card-main {
 .modal-checkout .item-name {
     display: grid;
     grid-template-areas: "name price";
-        /* "total total"; */
     grid-template-columns: repeat(2, minmax(150px, 1fr));
     grid-template-rows: .5fr;
 }
@@ -743,9 +698,6 @@ main .card-main {
 
 /* .item-name */
  .total {
-    /* grid-area: total; */
-    /* align-self: start;
-    justify-self: end; */
     text-align: right;
 }
 

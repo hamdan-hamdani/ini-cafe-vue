@@ -10,8 +10,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
-// import Updateproduct from '../../../views/Main/product/Updateproduct'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Modal',
@@ -21,7 +19,6 @@ export default {
       isActivv: false
     }
   },
-  // mixins: [Updateproduct],
   computed: {
     ...mapGetters({
       msg: 'getMessage',
@@ -33,29 +30,13 @@ export default {
   methods: {
     ...mapMutations(['mutActive', 'mutActivBtnCancel', 'mutActivBtnOk']),
     btnOk () {
-      alert('ok')
       if (this.activBtnCancel) {
         this.dData()
       }
       this.mutActive(false)
-      // this.mutActivBtnOk(false)
       this.mutActivBtnCancel(false)
-      // this.dData()
-      // this.mutActivBtnOk(true)
-      // if (this.getActivBtnOK) {
-      //   axios.delete('http://localhost:4000/api/v1/products/' + id)
-      //     .then((res) => {
-      //       alert('Delete success' + this.data2.id)
-      //       this.isActiveEdit = false
-      //       this.actAllProducts()
-      //     })
-      //     .catch(err => console.log(err))
-      // } else {
-      //   alert('te')
-      // }
     },
     btnCancel () {
-      alert('cancel')
       this.mutActive(false)
       this.mutActivBtnCancel(false)
     }
@@ -95,7 +76,6 @@ export default {
     line-height: 1.33;
     padding: 0 0 8px;
     margin: 0;
-    /* text-align: center; */
 }
 .btnOk {
   margin-top: 30px;

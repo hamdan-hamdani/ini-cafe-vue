@@ -18,7 +18,6 @@ export default {
   methods: {
     ...mapActions(['actNextPage']),
     nextPage (page) {
-      alert('Page berikutnya ' + page)
       this.actNextPage(page)
     }
   }

@@ -12,13 +12,6 @@
             <p class="rgtr">don't have an account yet? <router-link class="rtr" to="/register">Register</router-link></p>
         </form>
         <Modal />
-        <!-- <div v-if="isActivv" class="container-modal">
-          <div class="modal">
-            <p class="title">Sorry</p>
-            <p> {{msg}} </p>
-            <button class="btnOk" @click="btnOk">Ok</button>
-          </div>
-        </div> -->
     </div>
 </template>
 
@@ -38,7 +31,6 @@ export default {
       password: '',
       isActivv: false,
       passWarning: false
-      // /[\w\d]+[@][\.\w]*/g
     }
   },
   directives: {
@@ -56,14 +48,12 @@ export default {
   methods: {
     ...mapMutations(['mutActive']),
     coba () {
-      // alert('hai')
       this.warning = 'Example: email@xyz.com'
     },
     btnOk () {
       this.isActivv = false
     },
     isActiv () {
-      // alert('haj')
       this.warningMessPass = ''
       if (this.email === '') {
         this.actMessage('email is required')
@@ -72,7 +62,6 @@ export default {
       }
       // eslint-disable-next-line no-useless-escape
       const rr = this.email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
-      // console.log('rr rr')
       console.log(rr)
       if (rr === null) {
         return this.actMessage('Format email salah')
@@ -96,7 +85,6 @@ export default {
           this.$router.push('/')
         })
         .catch(err => {
-          // alert('coba err')
           this.mutActive(true)
           console.log(err)
         })
@@ -228,6 +216,5 @@ h3 {
     line-height: 1.33;
     padding: 0 0 8px;
     margin: 0;
-    /* text-align: center; */
 }
 </style>

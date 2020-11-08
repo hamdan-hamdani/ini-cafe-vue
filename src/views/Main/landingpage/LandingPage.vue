@@ -13,8 +13,6 @@
             <p>Makanan yang disajikan Ini cafe ialah makanan premium yang higienis</p>
             <button type="button" class="btn btn-dark rounded-pill ml-5">Beli Sekarang</button>
         </div>
-        <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        </nav> -->
         <div class="mt-150 text-center bg text-white ">
             <h2>Gunakan Kupon</h2>
             <p class="inline-block">Discount hingga <span>75%</span></p>
@@ -76,8 +74,6 @@ body {
     background-image: url(../../../assets/img/landing-page/4386.jpg);
     background-repeat: no-repeat;
     background-size: cover;
-    /* background-position-x: -64px;
-    background-position-y: -68px; */
     box-sizing: border-box;
     border-radius: 30px;
     margin-top: 0px;
@@ -93,10 +89,6 @@ body {
 .container h1 {
     font-size: 3rem;
 }
-
-/* .container button.right {
-    margin-right: -378px;
-} */
 
 .container .overlay {
     background-color: rgba(0, 0, 0, .5);
