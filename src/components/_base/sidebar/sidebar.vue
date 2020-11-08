@@ -54,7 +54,7 @@ export default {
       this.$router.push('/login')
     },
     getCategory () {
-      axios.get('http://api-inicafe.fwdev.online/api/v1/categories')
+      axios.get('https://api-inicafe.fwdev.online/api/v1/categories')
         .then((res) => {
           this.categories = res.data.result
         })
@@ -71,7 +71,7 @@ export default {
         image: this.data2.image,
         qty: this.data2.qty
       }
-      axios.post('http://api-inicafe.fwdev.online/api/v1/products', dataItem)
+      axios.post('https://api-inicafe.fwdev.online/api/v1/products', dataItem)
         .then((res) => {
           this.data2.idCategory = ''
           this.data2.nameProduct = ''

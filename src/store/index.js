@@ -87,7 +87,7 @@ export default new Vuex.Store({
   actions: {
     actAllProducts (setex) {
       return new Promise((resolve, reject) => {
-        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?page=' + this.state.page + '&limit=' + this.state.limit)
+        axios.get('https://api-inicafe.fwdev.online/api/v1/products/?page=' + this.state.page + '&limit=' + this.state.limit)
           .then(res => {
             setex.commit('setProduct', res.data.result)
             resolve(res.data.result)
@@ -100,11 +100,11 @@ export default new Vuex.Store({
     },
     actAddProduct (setex, payload) {
       return new Promise((resolve, reject) => {
-        axios.post('http://api-inicafe.fwdev.online/api/v1/products/', payload)
+        axios.post('https://api-inicafe.fwdev.online/api/v1/products/', payload)
           .then(async res => {
             resolve(res.data.result)
             return await new Promise((resolve, reject) => {
-              axios.get('http://api-inicafe.fwdev.online/api/v1/products/?page=' + this.state.page + '&limit=' + this.state.limit)
+              axios.get('https://api-inicafe.fwdev.online/api/v1/products/?page=' + this.state.page + '&limit=' + this.state.limit)
                 .then(res => {
                   setex.commit('setProduct', res.data.result)
                   resolve(res.data.result)
@@ -124,7 +124,7 @@ export default new Vuex.Store({
     actNextPage (setex, payload) {
       console.log(payload)
       return new Promise((resolve, reject) => {
-        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?page=' + payload + '&limit=' + this.state.limit)
+        axios.get('https://api-inicafe.fwdev.online/api/v1/products/?page=' + payload + '&limit=' + this.state.limit)
           .then((res) => {
             setex.commit('setProduct', res.data.result)
             resolve(res.data.result)
@@ -142,7 +142,7 @@ export default new Vuex.Store({
     },
     actSearch (setex, payload) {
       return new Promise((resolve, reject) => {
-        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?search=' + payload)
+        axios.get('https://api-inicafe.fwdev.online/api/v1/products/?search=' + payload)
           .then(res => {
             console.log('res')
             console.log(res)
@@ -158,7 +158,7 @@ export default new Vuex.Store({
     login (setex, payload) {
       console.log(payload)
       return new Promise((resolve, reject) => {
-        axios.post('http://api-inicafe.fwdev.online/api/v1/users/login', payload)
+        axios.post('https://api-inicafe.fwdev.online/api/v1/users/login', payload)
           .then(res => {
             console.log('res')
             console.log(res)
@@ -174,7 +174,7 @@ export default new Vuex.Store({
     },
     send (setex, payload) {
       return new Promise((resolve, reject) => {
-        axios.post('http://api-inicafe.fwdev.online/api/v1/users/register', payload)
+        axios.post('https://api-inicafe.fwdev.online/api/v1/users/register', payload)
           .then(res => {
             resolve(res.data.result)
           })
@@ -185,7 +185,7 @@ export default new Vuex.Store({
     },
     getProducts (setex) {
       return new Promise((resolve, reject) => {
-        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?page=1&limit=3')
+        axios.get('https://api-inicafe.fwdev.online/api/v1/products/?page=1&limit=3')
           .then(res => {
             setex.commit('setProduct', res.data.result)
             resolve(res.data.result)

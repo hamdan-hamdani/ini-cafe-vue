@@ -128,7 +128,7 @@ export default {
     sorting () {
       // let sort = ''
       if (this.sorti === 'A - Z') {
-        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?sort=nameProduct&order=asc')
+        axios.get('https://api-inicafe.fwdev.online/api/v1/products/?sort=nameProduct&order=asc')
           .then(res => {
             this.setProduct(res.data.result)
           })
@@ -136,7 +136,7 @@ export default {
             console.log(err)
           })
       } else if (this.sorti === 'Z - A') {
-        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?sort=nameProduct&order=desc')
+        axios.get('https://api-inicafe.fwdev.online/api/v1/products/?sort=nameProduct&order=desc')
           .then(res => {
             this.setProduct(res.data.result)
           })
@@ -144,7 +144,7 @@ export default {
             console.log(err)
           })
       } else if (this.sorti === 'Price A-Z') {
-        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?sort=price&order=asc')
+        axios.get('https://api-inicafe.fwdev.online/api/v1/products/?sort=price&order=asc')
           .then(res => {
             this.setProduct(res.data.result)
           })
@@ -152,7 +152,7 @@ export default {
             console.log(err)
           })
       } else if (this.sorti === 'Price Z-A') {
-        axios.get('http://api-inicafe.fwdev.online/api/v1/products/?sort=price&order=desc')
+        axios.get('https://api-inicafe.fwdev.online/api/v1/products/?sort=price&order=desc')
           .then(res => {
             this.setProduct(res.data.result)
           })

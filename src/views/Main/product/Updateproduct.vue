@@ -108,14 +108,14 @@ export default {
       this.isActiveAddItem = true
     },
     getCategory () {
-      axios.get('http://api-inicafe.fwdev.online/api/v1/categories')
+      axios.get('https://api-inicafe.fwdev.online/api/v1/categories')
         .then((res) => {
           this.categories = res.data.result
         })
         .catch(err => console.log(err))
     },
     getData () {
-      axios.get('http://api-inicafe.fwdev.online/api/v1/products')
+      axios.get('https://api-inicafe.fwdev.online/api/v1/products')
         .then((res) => {
           this.products = res.data.result
         })
@@ -141,7 +141,7 @@ export default {
       this.data2.id = id
     },
     dData () {
-      axios.delete('http://api-inicafe.fwdev.online/api/v1/products/' + this.data2.id)
+      axios.delete('https://api-inicafe.fwdev.online/api/v1/products/' + this.data2.id)
         .then((res) => {
           this.isActiveEdit = false
           this.actAllProducts()
@@ -159,7 +159,7 @@ export default {
         formData.append('price', this.data2.price)
         formData.append('file', this.data2.image)
         formData.append('qty', this.data2.qty)
-        axios.patch('http://api-inicafe.fwdev.online/api/v1/products/' + this.data2.id, formData)
+        axios.patch('https://api-inicafe.fwdev.online/api/v1/products/' + this.data2.id, formData)
           .then(res => {
             this.actAllProducts()
             this.data2.idCategory = ''

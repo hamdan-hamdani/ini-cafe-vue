@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     getHistory () {
-      axios.get('http://api-inicafe.fwdev.online/api/v1/histories/')
+      axios.get('https://api-inicafe.fwdev.online/api/v1/histories/')
         .then(res => {
           console.log(res.data.result)
           this.tmpArray = res.data.result

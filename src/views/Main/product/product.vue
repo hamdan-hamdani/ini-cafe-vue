@@ -26,7 +26,7 @@ export default {
     }
   },
   getData () {
-    Axios.get('http://api-inicafe.fwdev.online/api/v1/products')
+    Axios.get('https://api-inicafe.fwdev.online/api/v1/products')
       .then((res) => {
         this.products = res.data
       })

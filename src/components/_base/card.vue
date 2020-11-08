@@ -59,7 +59,7 @@ export default {
       this.task = ''
     },
     getData () {
-      axios.get('http://api-inicafe.fwdev.online/api/v1/products')
+      axios.get('https://api-inicafe.fwdev.online/api/v1/products')
         .then((res) => {
           this.products = res.data.result
         })
@@ -75,7 +75,7 @@ export default {
       this.isActiveEdit = true
     },
     deleteData (id) {
-      axios.delete('http://api-inicafe.fwdev.online/api/v1/products/' + id)
+      axios.delete('https://api-inicafe.fwdev.online/api/v1/products/' + id)
         .then((res) => {
           this.isActiveEdit = false
           this.getData()

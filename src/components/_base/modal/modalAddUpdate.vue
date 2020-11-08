@@ -70,7 +70,7 @@ export default {
       this.data2.image = this.$refs.file.files[0]
     },
     getCategory () {
-      axios.get('http://api-inicafe.fwdev.online/api/v1/categories')
+      axios.get('https://api-inicafe.fwdev.online/api/v1/categories')
         .then((res) => {
           this.categories = res.data.result
         })
@@ -84,7 +84,7 @@ export default {
         formData.append('price', this.data2.price)
         formData.append('file', this.data2.image)
         formData.append('qty', this.data2.qty)
-        axios.post('http://api-inicafe.fwdev.online/api/v1/products/', formData)
+        axios.post('https://api-inicafe.fwdev.online/api/v1/products/', formData)
           .then((res) => {
             this.data2.idCategory = ''
             this.data2.nameProduct = ''

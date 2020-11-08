@@ -145,7 +145,7 @@ export default {
   },
   methods: {
     getCategory () {
-      axios.get('http://api-inicafe.fwdev.online/api/v1/categories')
+      axios.get('https://api-inicafe.fwdev.online/api/v1/categories')
         .then((res) => {
           this.categories = res.data.result
         })
@@ -162,7 +162,7 @@ export default {
         image: this.data2.image,
         qty: this.data2.qty
       }
-      axios.post('http://api-inicafe.fwdev.online/api/v1/products', dataItem)
+      axios.post('https://api-inicafe.fwdev.online/api/v1/products', dataItem)
         .then((res) => {
           this.isActiveAddItem = false
           this.getData()
@@ -170,7 +170,7 @@ export default {
         .catch(err => console.log(err))
     },
     getData () {
-      axios.get('http://api-inicafe.fwdev.online/api/v1/products')
+      axios.get('https://api-inicafe.fwdev.online/api/v1/products')
         .then((res) => {
           this.products = res.data.result
         })
@@ -178,7 +178,7 @@ export default {
       this.getCategory()
     },
     tmbData: function () {
-      axios.post('http://api-inicafe.fwdev.online/api/v1/products', this.kmn)
+      axios.post('https://api-inicafe.fwdev.online/api/v1/products', this.kmn)
         .then((res) => {
           this.getData()
         })
@@ -259,7 +259,7 @@ export default {
         cashier: 'hamdan',
         amount: this.ttop
       }
-      axios.post('http://api-inicafe.fwdev.online/api/v1/histories/', kirimData)
+      axios.post('https://api-inicafe.fwdev.online/api/v1/histories/', kirimData)
         .then((res) => {
           this.isActive = false
         })
