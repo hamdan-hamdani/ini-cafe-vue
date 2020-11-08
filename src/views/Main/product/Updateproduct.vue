@@ -112,14 +112,14 @@ export default {
       this.isActiveAddItem = true
     },
     getCategory () {
-      axios.get('http://localhost:4000/api/v1/categories')
+      axios.get('http://api-inicafe.fwdev.online/api/v1/categories')
         .then((res) => {
           this.categories = res.data.result
         })
         .catch(err => console.log(err))
     },
     getData () {
-      axios.get('http://localhost:4000/api/v1/products')
+      axios.get('http://api-inicafe.fwdev.online/api/v1/products')
         .then((res) => {
           this.products = res.data.result
         })
@@ -143,7 +143,7 @@ export default {
       this.mutActivBtnCancel(true)
       this.mutActivBtnOk(true)
       this.data2.id = id
-      alert('yahs')
+    //   alert('yahs')
     //   if (this.getActivBtnOK) {
     //     axios.delete('http://localhost:4000/api/v1/products/' + id)
     //       .then((res) => {
@@ -157,7 +157,7 @@ export default {
     //   }
     },
     dData () {
-      axios.delete('http://localhost:4000/api/v1/products/' + this.data2.id)
+      axios.delete('http://api-inicafe.fwdev.online/api/v1/products/' + this.data2.id)
         .then((res) => {
           alert('Delete success' + this.data2.id)
           this.isActiveEdit = false
@@ -177,7 +177,7 @@ export default {
         formData.append('price', this.data2.price)
         formData.append('file', this.data2.image)
         formData.append('qty', this.data2.qty)
-        axios.patch('http://localhost:4000/api/v1/products/' + this.data2.id, formData)
+        axios.patch('http://api-inicafe.fwdev.online/api/v1/products/' + this.data2.id, formData)
           .then(res => {
             // const currentPage = (this.data2.index + 1) % 3
             // this.data2.index + 3
