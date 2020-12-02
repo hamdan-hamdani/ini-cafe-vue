@@ -23,7 +23,7 @@
           </div>
           <div class="button-bottom">
               <button v-on:click="checkout">Checkout</button>
-              <button v-on:click="cancel">Cancel</button>
+              <button v-on:click="cancel">Cancelll</button>
           </div>
         </div>
         </div>

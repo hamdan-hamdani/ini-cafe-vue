@@ -24,10 +24,40 @@ export default new Vuex.Store({
     lastPage: 0,
     activ: false,
     activeAddUpdate: false,
+    activeHumMenu: false,
     ActivBtnCancel: false,
-    ActivBtnOk: false
+    ActivBtnOk: false,
+    isActiveCart: false,
+    isActiveCartNavbar: false
   },
   mutations: {
+    kirimEmail (state) {
+      var nodemailer = require('nodemailer')
+      var fs = require('fs')
+
+      var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'mychat709@gmail.com',
+          pass: 'Konsisten1!'
+        }
+      })
+
+      var template = fs.readFileSync('index.html', 'utf-8')
+
+      var mailOptions = {
+        from: 'mychat709',
+        to: state.user.email,
+        subject: 'Selamat Datang di MyChat',
+        html: template
+      }
+      console.log(mailOptions.html)
+
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) throw err
+        console.log('Email sent: ' + info.response)
+      })
+    },
     settotalCart (state, payload) {
       state.totalCart = payload
     },
@@ -73,6 +103,15 @@ export default new Vuex.Store({
     },
     mutActiveAddUpdate (state, payload) {
       state.activeAddUpdate = payload
+    },
+    mutHumMenu (state, payload) {
+      state.activeHumMenu = payload
+    },
+    mutIsActiveCart (state, payload) {
+      state.isActiveCart = payload
+    },
+    mutIsActiveCartNavbar (state, payload) {
+      state.isActiveCartNavbar = payload
     },
     mutMsgAdd (state, payload) {
       state.message = payload
@@ -248,6 +287,12 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    getisActiveCart (state) {
+      return state.isActiveCart
+    },
+    getisActiveCartNavbar (state) {
+      return state.isActiveCartNavbar
+    },
     gettotalCart (state) {
       return state.totalCart
     },
@@ -287,6 +332,9 @@ export default new Vuex.Store({
     getActivAddUpdate (state) {
       return state.activeAddUpdate
     },
+    getActiveHumMenu (state) {
+      return state.activeHumMenu
+    },
     getActivBtnCancel (state) {
       return state.ActivBtnCancel
     },
@@ -298,6 +346,9 @@ export default new Vuex.Store({
     },
     getLimit (state) {
       return state.limit
+    },
+    getUser (state) {
+      return state.user.email
     }
   }
 })

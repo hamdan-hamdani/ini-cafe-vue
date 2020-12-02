@@ -236,4 +236,13 @@ box-sizing: border-box;
 box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
 border-radius: 5px;
 }
+
+@media only screen and (max-width: 576px) {
+.container-chekcout .modal-add-item {
+  min-width: 350px;
+}
+.modal-add-item .add-item-name input[data-v-bd42ff64] {
+    width: 205px;
+}
+}
 </style>

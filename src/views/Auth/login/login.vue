@@ -217,4 +217,10 @@ h3 {
     padding: 0 0 8px;
     margin: 0;
 }
+
+@media only screen and (max-width: 576px) {
+            .container-menu {
+              width: 90%;
+            }
+        }
 </style>
