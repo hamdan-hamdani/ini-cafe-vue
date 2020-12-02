@@ -172,7 +172,7 @@ export default {
       this.actSearch(this.wordsearch)
     },
     sendEmail: () => {
-      this.kirimEmail()
+      // this.kirimEmail()
     },
     sorting () {
       // let sort = ''

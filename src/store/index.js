@@ -32,31 +32,31 @@ export default new Vuex.Store({
   },
   mutations: {
     kirimEmail (state) {
-      var nodemailer = require('nodemailer')
-      var fs = require('fs')
+      // var nodemailer = require('nodemailer')
+      // var fs = require('fs')
 
-      var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: 'mychat709@gmail.com',
-          pass: 'Konsisten1!'
-        }
-      })
+      // var transporter = nodemailer.createTransport({
+      //   service: 'gmail',
+      //   auth: {
+      //     user: 'mychat709@gmail.com',
+      //     pass: 'Konsisten1!'
+      //   }
+      // })
 
-      var template = fs.readFileSync('index.html', 'utf-8')
+      // var template = fs.readFileSync('index.html', 'utf-8')
 
-      var mailOptions = {
-        from: 'mychat709',
-        to: state.user.email,
-        subject: 'Selamat Datang di MyChat',
-        html: template
-      }
-      console.log(mailOptions.html)
+      // var mailOptions = {
+      //   from: 'mychat709',
+      //   to: state.user.email,
+      //   subject: 'Selamat Datang di MyChat',
+      //   html: template
+      // }
+      // console.log(mailOptions.html)
 
-      transporter.sendMail(mailOptions, (err, info) => {
-        if (err) throw err
-        console.log('Email sent: ' + info.response)
-      })
+      // transporter.sendMail(mailOptions, (err, info) => {
+      //   if (err) throw err
+      //   console.log('Email sent: ' + info.response)
+      // })
     },
     settotalCart (state, payload) {
       state.totalCart = payload
