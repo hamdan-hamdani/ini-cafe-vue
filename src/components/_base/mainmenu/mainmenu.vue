@@ -6,10 +6,46 @@
       </select>
     </div> -->
     <main>
+      <div class="container-your-cart-nav" v-if="getisActiveCartNavbar">
+        <span v-on:click="closeContainerYourCartNav" class="badge">X</span>
+        <div class="container-your-cart" v-if="currentproduct.length === 0">
+            <img src="../../../assets/img/food.png" alt="" srcset="">
+            <span>Your cart is empty </span>
+            <span>Please add some items from the menu</span>
+        </div>
+        <div v-else>
+        <div class="item-cart" v-for="(nproduct, index) in currentproduct" :key="nproduct.index">
+          <!-- <div> -->
+          <img class="img" :src="nproduct.image" alt="" srcset="">
+          <!-- </div> -->
+          <!-- <div class="box-item-name"> -->
+          <span class="item-name">{{ nproduct.nProduct }} <span class="box-trash" @click="delItem(index, nproduct.index)"><span class="trash">x</span></span></span>
+          <div class="button">
+              <button v-on:click="buttonMin(nproduct.index, nproduct.pp)">-</button><input type="text" v-model="qtys[nproduct.index]"><button v-on:click="buttonAdd(nproduct.index, nproduct.pp)">+</button>
+          </div>
+          <span class="item-price">Rp. {{ qtys[nproduct.index] * nproduct.pp }}</span>
+          <!-- </div> -->
+
+        </div>
+        <div class="bottom">
+          <div class="total">
+              <span>Total</span>
+              <span>Rp. {{ttop }} *</span>
+              <span>*Belum termasuk ppn</span>
+          </div>
+          <div class="button-bottom">
+              <button v-on:click="checkout">Checkout</button>
+              <button v-on:click="cancel">Cancel</button>
+          </div>
+        </div>
+        </div>
+
+      </div>
       <div class="sort">
       <select @change="sorting" name="sort" id="sort" v-model="sorti" >
         <option v-for="(sort, index) in sorts" :key="index" v-bind:value="sort">{{sort}}</option>
       </select>
+      <div class="search-navbar"><input type="text" v-model="wordsearch" placeholder="Search Items" @keyup="searchNavbar" name="" id=""></div>
       </div>
       <div class="card-main" v-for="(item, index) in getProductsAll" :key="item.id" v-on:click="currentItem(item.image,item.nameProduct,item.price, index, item.id)">
         <img v-bind:src="item.image" alt="">
@@ -35,7 +71,7 @@
         <div v-else>
         <div class="item-cart" v-for="(nproduct, index) in currentproduct" :key="nproduct.index">
           <img class="img" :src="nproduct.image" alt="" srcset="">
-          <span class="item-name">{{ nproduct.nProduct }}  {{nproduct.index}} <span @click="delItem(index, nproduct.index)">X</span></span>
+          <span class="item-name">{{ nproduct.nProduct }} <span class="box-trash" @click="delItem(index, nproduct.index)"><span class="trash">x</span></span></span>
           <div class="button">
               <button v-on:click="buttonMin(nproduct.index, nproduct.pp)">-</button><input type="text" v-model="qtys[nproduct.index]"><button v-on:click="buttonAdd(nproduct.index, nproduct.pp)">+</button>
           </div>
@@ -54,8 +90,9 @@
         </div>
         </div>
     </div>
-    <div v-if="isActive" class="container-chekcout">
+    <div v-if="getisActiveCart" class="container-chekcout">
       <div class="modal-checkout">
+        <span v-on:click="closeContainerCheckout" class="badge">X</span>
         <div class="item-checkout">
           <span>Checkout <br>Cashier : Pevita Pearce</span>
           <span>Receipt no: #010410919</span>
@@ -75,7 +112,7 @@
           <span>Payment: Cash</span>
           <button v-on:click="print">Prints</button>
           <span>Or</span>
-          <button>Send Email</button>
+          <button @click="sendEmail" >Send Email</button>
         </div>
       </div>
     </div>
@@ -88,6 +125,7 @@ import ButtonPagination from '../button/buttonPagination'
 import axios from 'axios'
 import navbar from '../navbar/navbar'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
+// const sendEmail = require('../../../nodemailer/sendEmail')
 export default {
   name: 'Mainmenu',
   components: {
@@ -107,11 +145,12 @@ export default {
       qtys: [],
       total: [],
       ttop: 0,
-      isActive: false,
+      // isActive: false,
       // teangKata: '',
       totalCart: [],
       sorti: '',
-      sorts: ['A - Z', 'Z - A', 'Price A-Z', 'Price Z-A']
+      sorts: ['A - Z', 'Z - A', 'Price A-Z', 'Price Z-A'],
+      wordsearch: ''
     }
   },
   computed: {
@@ -122,9 +161,19 @@ export default {
     //   console.log(carib)
     //   return carib
     // },
-    ...mapGetters(['gettotalCart, getSearch', 'getProductsAll', 'getPage', 'getLimit', 'getTotalProducts', 'getlastpage'])
+    ...mapGetters(['gettotalCart, getSearch', 'getProductsAll', 'getPage', 'getLimit', 'getTotalProducts', 'getlastpage', 'getisActiveCart', 'getisActiveCartNavbar'])
   },
   methods: {
+    closeContainerYourCartNav () {
+      this.mutIsActiveCartNavbar(false)
+    },
+
+    searchNavbar () {
+      this.actSearch(this.wordsearch)
+    },
+    sendEmail: () => {
+      this.kirimEmail()
+    },
     sorting () {
       // let sort = ''
       if (this.sorti === 'A - Z') {
@@ -161,8 +210,8 @@ export default {
           })
       }
     },
-    ...mapMutations(['settotalCart', 'setProduct']),
-    ...mapActions(['actAllProducts', 'actNextPage']),
+    ...mapMutations(['settotalCart', 'setProduct', 'kirimEmail', 'mutIsActiveCart', 'mutIsActiveCartNavbar']),
+    ...mapActions(['actAllProducts', 'actNextPage', 'actSearch']),
     nextPage (page) {
       this.actNextPage(page)
     },
@@ -266,7 +315,7 @@ export default {
       }
     },
     checkout: function () {
-      this.isActive = true
+      this.mutIsActiveCart(true)
     },
     cancel: function () {
       for (let i = 0; i <= this.currentproduct.length; i++) {
@@ -296,10 +345,13 @@ export default {
       }
       axios.post(process.env.VUE_APP_HISTORY, kirimData)
         .then((res) => {
-          this.isActive = false
+          this.mutIsActiveCart(false)
         })
         .catch(err => console.log(err))
       this.cancel()
+    },
+    closeContainerCheckout () {
+      this.mutIsActiveCart(false)
     }
   },
   mounted () {
@@ -319,6 +371,23 @@ export default {
 .sort {
       width: 100%;
     margin-bottom: 16px;
+}
+.sort select {
+  padding: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+    border: none;
+    border-radius: 5px;
+}
+.sort .search-navbar {
+  display: inline-block;
+  margin-left: 10%;
+  display: none;
+}
+.search-navbar input {
+    padding: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+    border: none;
+    border-radius: 5px;
 }
 .main {
       grid-area: main;
@@ -344,7 +413,7 @@ main {
 
 main .card-main {
     display: inline-block;
-    width: 30% !important;
+    width: 30% ;
     margin-bottom: 10px;
 }
 
@@ -358,6 +427,8 @@ main .card-main {
     max-height: 160px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    object-fit: cover;
+    object-position: center;
 }
 
 .your-cart {
@@ -372,6 +443,50 @@ main .card-main {
     width: 50%;
     margin: auto;
     text-align: center;
+}
+
+.badge {
+    font-size: 10px;
+    background-color: #57CAD5;
+    color: #F24F8A;
+    border-radius: 50%;
+    padding: 1%;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    text-align: center;
+    line-height: 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.container-your-cart-nav {
+    background: #fff;
+    position: absolute;
+    margin-right: 20px;
+    border-radius: 5px;
+    padding: 20px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    box-sizing: border-box;
+}
+
+/* .container-your-cart-nav .item-cart img.img {
+  width: 25%;
+  height: 25%;
+  object-fit: cover;
+  object-position: center;
+} */
+
+/* .container-your-cart-nav .box-item-name {
+    position: absolute;
+    top: 50px;
+    left: 110px;
+} */
+
+.container-your-cart-nav .bottom .total {
+  margin-top: 50px;
 }
 
 .your-cart .container-your-cart img {
@@ -409,6 +524,8 @@ main .card-main {
     /* border: 1px solid; */
     height: 60px;
     max-height: 60px;
+    object-fit: cover;
+    object-position: center;
 }
 
 .your-cart .item-cart .item-name {
@@ -617,5 +734,46 @@ main .card-main {
         background-color: #57CAD5;
             display: inline-block;
 } */
+.box-trash {
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+}
+.trash {
+  background: url("../../../../src/assets/trash-alt-regular.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  color: transparent;
+  display: inline-block;
+}
+/* select {
+    background: url(/img/filter-solid.9f6e949e.svg);
+    background-repeat: no-repeat;
+    border: none;
+    width: 35px;
+} */
+
+@media only screen and (max-width: 576px) {
+            .main {
+              grid-template-areas:
+        "main main";
+    grid-template-columns: 1fr;
+            }
+            main .card-main {
+              width: 49% !important;
+            }
+            .sort .search-navbar {
+              display: inline-block;
+            }
+            .container-chekcout {
+              display: block;
+              padding: 20px;
+              box-sizing: border-box;
+            }
+            .container-chekcout .modal-checkout {
+              width: 100%;
+              min-width: 0;
+            }
+        }
 
 </style>
