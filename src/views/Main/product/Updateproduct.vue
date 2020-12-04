@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <Navbar/>
-        <Cart/>
+        <!-- <Cart/> -->
         <Sidebar/>
             <div v-if="isActiveEdit" class="container-chekcout">
                 <div class="modal-add-item">
@@ -57,7 +57,7 @@ import Modal from '../../../components/_base/modal/modal'
 import ButtonPagination from '../../../components/_base/button/buttonPagination'
 import axios from 'axios'
 import Navbar from '../../../components/_base/navbar/navbar'
-import Cart from '../../../components/_base/navbar/cart'
+// import Cart from '../../../components/_base/navbar/cart'
 import Sidebar from '../../../components/_base/sidebar/sidebar'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 require('dotenv').config()
@@ -65,7 +65,7 @@ export default {
   name: 'Update',
   components: {
     Navbar,
-    Cart,
+    // Cart,
     Sidebar,
     ButtonPagination,
     Modal
@@ -93,11 +93,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['gettotalCart', 'getSearch', 'getProductsAll', 'getTotalProducts', 'getlastpage', 'getActivBtnOK'])
+    ...mapGetters(['gettotalCart', 'getSearch', 'getProductsAll', 'getTotalProducts', 'getlastpage', 'getActivBtnOK', 'getNavTitle'])
   },
   methods: {
     ...mapActions(['actAllProducts', 'actNextPage']),
-    ...mapMutations(['mutActive', 'setMessage', 'mutActivBtnCancel', 'mutActivBtnOk']),
+    ...mapMutations(['mutActive', 'setMessage', 'mutActivBtnCancel', 'mutActivBtnOk', 'mutNavTitle']),
     nextPage (page) {
       this.actNextPage(page)
     },
@@ -183,6 +183,7 @@ export default {
   mounted () {
     this.getCategory()
     this.actAllProducts()
+    this.mutNavTitle('Update')
   },
   created () {
     this.$root.$on('newTask', task => {
@@ -203,9 +204,9 @@ export default {
 .container {
     display: grid;
     grid-template-areas:
-        "header header cart"
+        "header header header"
         "left-bar main main";
-    grid-template-columns: 0.13fr 2fr 1.5fr;
+    grid-template-columns: 0.13fr 2fr;
     font-size: 15px;
 }
 
@@ -394,7 +395,7 @@ main {
 
 main .card-main {
     display: inline-block;
-    width: 30% !important;
+    width: 22% !important;
     margin-bottom: 10px;
     background-color: #ffffff;
     padding: 5px;
@@ -403,6 +404,10 @@ main .card-main {
 
 .card-main p {
     margin-top: 5px;
+    font-size: 1em;
+    display: block;
+    overflow: hidden;
+    max-height: 15px;
 }
 
 .card-main p:nth-child(3) {
@@ -416,7 +421,7 @@ main .card-main {
 }
 
 .card-main button {
-    padding: 5px 30px;
+    padding: 2% 12%;
     background-color: #57CAD5;
     border: none;
     border-radius: 3px;
@@ -663,12 +668,12 @@ main .card-main {
 /* responsive  */
 
 @media (max-width : 768px) {
-    .container-admin {
+    .container {
         display: grid;
         grid-template-areas:
             "header header header"
             "left-bar main main";
-        grid-template-columns: 0.13fr 2fr 1.5fr;
+        grid-template-columns: 0.13fr 2fr;
         font-size: 15px;
     }
 
@@ -679,15 +684,30 @@ main .card-main {
     .your-cart {
         display: none;
     }
+
+    main .card-main {
+        width: 30% !important;
+    }
+
+    .card-main button {
+        padding: 5px 5px;
+    }
 }
 
 @media (max-width : 576px) {
-    .container-admin {
+    /* .container-admin {
         display: grid;
         grid-template-areas:
             "header header"
             "main main";
         grid-template-columns: 0.13fr 2fr;
+    } */
+
+    .container {
+        grid-template-areas:
+        "header header "
+        "main main";
+    grid-template-columns: 2fr;
     }
 
     .cart {
@@ -704,7 +724,7 @@ main .card-main {
 
     main .card-main {
         display: inline-block;
-        width: 50% !important;
+        width: 49% !important;
         margin-bottom: 10px;
     }
 
@@ -714,6 +734,22 @@ main .card-main {
         max-height: 160px;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
+    }
+
+    .card-main button {
+        padding: 5px 20px;
+    }
+
+    .container-chekcout .modal-add-item {
+        min-width:350px
+    }
+
+    .modal-add-item .add-item-name {
+        grid-template-columns: minmax(90px, .5fr) minmax(150px, 1fr);
+    }
+
+    .modal-add-item .add-item-name input {
+        width: 100%;
     }
 
 }

@@ -3,8 +3,10 @@
           <div class="modal">
             <p class="title">Sorry</p>
             <p> {{msg}} </p>
-            <button class="btnOk" @click="btnOk">Ok</button>
-            <button v-if="activBtnCancel" class="btnOk" @click="btnCancel">Cancel</button>
+            <div class="container-btn">
+              <button class="btnOk" @click="btnOk">Ok</button>
+              <button v-if="activBtnCancel" class="btnOk" @click="btnCancel">Cancel</button>
+            </div>
           </div>
         </div>
 </template>
@@ -68,6 +70,10 @@ export default {
   box-shadow: none;
   box-sizing: border-box;
 }
+.container-btn {
+  display: flex;
+  justify-content: space-between;
+}
 .title {
     font-size: 18px;
     font-weight: 800;
@@ -77,20 +83,30 @@ export default {
     padding: 0 0 8px;
     margin: 0;
 }
+
 .btnOk {
-  margin-top: 30px;
-  border: 0;
-  background:#F24F8A;
-  color: #fff;
-  font-size: 13px;
-    height: 40px;
-    line-height: 24px;
+    margin-top: 30px;
+    border: 0;
+    background: #F24F8A;
+    color: #fff;
+    font-size: 13px;
     display: inline-block;
-    padding: 0 64px;
+    padding: 10px 0px;
     border-radius: 8px;
     font-weight: 600;
     outline: 0;
-    width: 145px;
-    margin-right: 5px;
+    width: 45%;
+    max-width: 145px;
+    }
+
+@media only screen and ( max-width: 576px) {
+  .container-modal {
+        padding: 20px;
+    }
+
+    .modal {
+        width: 100%;
+    }
+
 }
 </style>

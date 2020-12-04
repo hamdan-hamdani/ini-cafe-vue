@@ -28,9 +28,13 @@ export default new Vuex.Store({
     ActivBtnCancel: false,
     ActivBtnOk: false,
     isActiveCart: false,
+    navTitle: '',
     isActiveCartNavbar: false
   },
   mutations: {
+    mutNavTitle (state, payload) {
+      state.navTitle = payload
+    },
     kirimEmail (state) {
       // var nodemailer = require('nodemailer')
       // var fs = require('fs')
@@ -287,6 +291,9 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    getNavTitle (state) {
+      return state.navTitle
+    },
     getisActiveCart (state) {
       return state.isActiveCart
     },

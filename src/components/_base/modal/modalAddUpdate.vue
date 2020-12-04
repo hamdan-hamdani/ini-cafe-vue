@@ -241,8 +241,11 @@ border-radius: 5px;
 .container-chekcout .modal-add-item {
   min-width: 350px;
 }
+.modal-add-item .add-item-name {
+  grid-template-columns: minmax(90px,.5fr) minmax(150px,1fr);
+}
 .modal-add-item .add-item-name input[data-v-bd42ff64] {
-    width: 205px;
+    width: 100%;
 }
 }
 </style>

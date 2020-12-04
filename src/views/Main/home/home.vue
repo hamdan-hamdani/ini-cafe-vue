@@ -12,6 +12,7 @@ import Navbar from '../../../../src/components/_base/navbar/navbar'
 import Cart from '../../../../src/components/_base/navbar/cart'
 import SideBar from '../../../../src/components/_base/sidebar/sidebar'
 import Mainmenu from '../../../../src/components/_base/mainmenu/mainmenu'
+import { mapMutations } from 'vuex'
 export default {
   name: 'Home',
   components: {
@@ -20,6 +21,9 @@ export default {
     SideBar,
     Mainmenu
   },
+  mounted () {
+    this.mutNavTitle('Foods Item')
+  },
   data: function () {
     return {
       products: [],
@@ -27,6 +31,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['mutNavTitle']),
     aData: function (data) {
       this.dd = data
       console.log(this.dd)

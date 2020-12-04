@@ -19,7 +19,7 @@
           <img class="img" :src="nproduct.image" alt="" srcset="">
           <!-- </div> -->
           <!-- <div class="box-item-name"> -->
-          <span class="item-name">{{ nproduct.nProduct }} <span class="box-trash" @click="delItem(index, nproduct.index)"><span class="trash">x</span></span></span>
+          <span class="item-name">{{ nproduct.nProduct }} <span class="box-trash" @click="delItem(index, nproduct.index)"><img src="../../../../src/assets/trash-alt-regular.svg" class="trash"></span></span>
           <div class="button">
               <button v-on:click="buttonMin(nproduct.index, nproduct.pp)">-</button><input type="text" v-model="qtys[nproduct.index]"><button v-on:click="buttonAdd(nproduct.index, nproduct.pp)">+</button>
           </div>
@@ -71,7 +71,7 @@
         <div v-else>
         <div class="item-cart" v-for="(nproduct, index) in currentproduct" :key="nproduct.index">
           <img class="img" :src="nproduct.image" alt="" srcset="">
-          <span class="item-name">{{ nproduct.nProduct }} <span class="box-trash" @click="delItem(index, nproduct.index)"><span class="trash">x</span></span></span>
+          <span class="item-name">{{ nproduct.nProduct }} <span class="box-trash" @click="delItem(index, nproduct.index)"><img src="../../../../src/assets/trash-alt-regular.svg" class="trash"></span></span>
           <div class="button">
               <button v-on:click="buttonMin(nproduct.index, nproduct.pp)">-</button><input type="text" v-model="qtys[nproduct.index]"><button v-on:click="buttonAdd(nproduct.index, nproduct.pp)">+</button>
           </div>
@@ -369,8 +369,10 @@ export default {
 
 <style scoped>
 .sort {
-      width: 100%;
+    width: 100%;
     margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
 }
 .sort select {
   padding: 10px;
@@ -380,7 +382,6 @@ export default {
 }
 .sort .search-navbar {
   display: inline-block;
-  margin-left: 10%;
   display: none;
 }
 .search-navbar input {
@@ -740,11 +741,19 @@ main .card-main {
   display: inline-block;
 }
 .trash {
-  background: url("../../../../src/assets/trash-alt-regular.svg");
+  /* background: url("../../../../src/assets/trash-alt-regular.svg");
   background-repeat: no-repeat;
   background-size: contain;
   color: transparent;
-  display: inline-block;
+  display: inline-block; */
+  width: 25px !important;
+    height: 25px !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    max-width: 25px !important;
+    max-height: 25px !important;
+    border: none !important;
+    border-radius: 0px !important;
 }
 /* select {
     background: url(/img/filter-solid.9f6e949e.svg);

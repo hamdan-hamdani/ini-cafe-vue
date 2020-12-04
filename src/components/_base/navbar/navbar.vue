@@ -4,13 +4,13 @@
             <div v-on:click="humMenu"><img src="../../../assets/img/menu.png" alt="menu"></div>
             <div v-if="getActiveHumMenu" class="hum-menu">
               <ul>
-                <li><router-link to="/">Home</router-link></li>
+                <li @click="closeHumMenu"><router-link to="/">Home</router-link></li>
                 <li v-on:click="addItem">Insert Data</li>
-                <li><router-link class="rtr-li" to="/update">Update Data</router-link></li>
-                <li><router-link class="rtr-li2" to="/history">History</router-link></li>
+                <li @click="closeHumMenu"><router-link class="rtr-li" to="/update">Update Data</router-link></li>
+                <li @click="closeHumMenu"><router-link class="rtr-li2" to="/history">History</router-link></li>
               </ul>
             </div>
-            <h1>Foods Items</h1>
+            <h1>{{getNavTitle}}</h1>
             <div class="shopping-cart" v-on:click="checkout">
               <span class="badge">{{gettotalCart}}</span>
               <img src="../../../assets/img/shopping-cart-solid.svg" alt="" srcset="">
@@ -46,6 +46,9 @@ export default {
       this.mutHumMenu(false)
       this.mutActiveAddUpdate(true)
     },
+    closeHumMenu () {
+      this.mutHumMenu(false)
+    },
     humMenu: function () {
       if (this.getActiveHumMenu === true) {
         this.mutHumMenu(false)
@@ -62,7 +65,7 @@ export default {
     ...mapActions(['actSearch'])
   },
   computed: {
-    ...mapGetters(['getSearch', 'getActiveHumMenu', 'gettotalCart'])
+    ...mapGetters(['getSearch', 'getActiveHumMenu', 'gettotalCart', 'getNavTitle'])
   }
 }
 </script>

@@ -1,8 +1,15 @@
 <template>
     <div class="container-chart">
-       <select @change="history" name="category" id="category" v-model="Category" >
+      <div class="revenue">
+        <span>Revenue</span>
+          <span><select @change="history" name="category" id="category" v-model="Category">
+          <option value="month" selected>Month</option>
+          <option v-for="(category, index) in categories" :key="index" v-bind:value="category">{{category}}</option>
+        </select></span>
+      </div>
+       <!-- <select @change="history" name="category" id="category" v-model="Category" >
                         <option v-for="(category, index) in categories" :key="index" v-bind:value="category">{{category}}</option>
-                    </select>
+                    </select> -->
         <LineChart :chart-data="datacollection"></LineChart>
     </div>
 </template>
@@ -247,5 +254,38 @@ export default {
     width: 100%;
     /* height: 250px; */
     margin: 10px auto;
+}
+
+.revenue {
+  width: 100%;
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    /* padding: 15px; */
+    box-sizing: border-box;
+    /* box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.25);
+    border-radius: 10px; */
+}
+
+.revenue span select {
+    color: #4F4E4E;
+    background: #CECECE;
+    border-radius: 10px;
+}
+
+.revenue span {
+    flex: 1;
+}
+
+.revenue span:nth-child(2) {
+    text-align: right;
+    padding-right: 20px;
+}
+
+.revenue div {
+    flex: 100%;
+    /* border: 1px solid black; */
+    margin-top: 20px;
+    /* padding: 115px; */
 }
 </style>
